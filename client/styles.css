@@ -1,0 +1,72 @@
+
+.parent {
+    margin: 1rem;
+    padding: 2rem 2rem;
+    text-align: center;
+}
+#sidepanel {
+    display: inline-block;
+    border: 2px solid black;
+    vertical-align: top;
+    margin-right: 20px;
+    height: 30%;
+}
+#manage {
+    display: inline-block;
+    border: 2px solid black;
+    vertical-align: baseline;
+    margin-right: 20px;
+    height: 30%;
+}
+svg {
+    display: inline-block;
+    border: 2px solid black;
+    vertical-align: top;
+}
+header {
+    margin: 1rem;
+    border-bottom: 1px solid black;
+    text-align-last: center;
+    width: 98%;
+}
+.search {
+
+    right: 10%;
+    width: 30%;
+}
+
+body {
+    font-size: 14px;
+    font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+    background: #fcfcfc;
+    line-height: 1.45em;
+  }
+  a {
+    color: #555;
+  }
+  a:hover {
+    color: #000;
+  }
+  ul {
+    margin: 0 20px;
+    padding: 0;
+  }
+  div.code {
+      border: 1px solid #ccc;
+      background: #eee;
+      margin: 10px 0 10px 0;
+      padding: 10px;
+      width: 720px;
+  }
+div.tooltip {	
+  position: absolute;			
+  text-align: center;			
+  width: 120px;					
+  height: 60px;					
+  padding: 2px;				
+  font: 12px sans-serif;		
+  background: white;	
+  border: 1px;		
+  border-radius: 8px;			  box-shadow: 5px 5px 5px #888888;
+  pointer-events: none;			
+}

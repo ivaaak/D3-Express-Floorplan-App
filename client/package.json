@@ -1,14 +1,23 @@
 {
-  "name": "demo_node_app",
-  "version": "1.0.0",
-  "main": "server.js",
+  "name": "client",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start:client": "npm run dev",
+    "start": "npm run dev",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "express": "^4.13.4"
+    "axios": "^1.6.8",
+    "d3": "^7.9.0",
+    "vue": "^3.4.21",
+    "vuetify": "^3.4.0-beta.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.4",
+    "vite": "^5.1.6"
   }
 }
