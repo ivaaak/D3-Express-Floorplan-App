@@ -2,7 +2,9 @@ import * as dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
 import { connectToDatabase } from "./database";
-import { employeeRouter } from "./employee.routes";
+import { employeeService } from "./employee.service";
+import { floorplanService } from "./floorplan.service";
+
 import path from "path";
 
 // Load environment variables from the .env file, where the ATLAS_URI is configured
@@ -21,27 +23,17 @@ connectToDatabase(ATLAS_URI)
   .then(() => {
     const app = express();
     app.use(cors());
-    app.use("/employees", employeeRouter);
+    app.use("/employees", employeeService);
 
-    // // Serve static files from the /client/public directory
-    // app.use(express.static(path.join(__dirname, '../../client/public')));
-
-    // Serve static files
-    app.use(express.static('public'));
-
-    // Serve JavaScript files with correct MIME type
-    app.use((req, res, next) => {
-      if (req.url.endsWith('.js')) {
-        res.setHeader('Content-Type', 'application/javascript');
-      }
-      next();
-    });
-    app.use((req, res, next) => {
-      if (req.url.endsWith('.css')) {
-        res.setHeader('Content-Type', 'text/css');
-      }
-      next();
-    });
+    // // Use the middleware to inject the service into your routes
+    // app.use('/floorplan', floorplanService, (req, res) => {
+    //   // Access the service methods from the request object
+    //   const heatmap = req.service.getHeatmap();
+    //   const overlays = req.service.getOverlays();
+    
+    //   // Example route handler
+    //   res.json({ heatmap, overlays });
+    // });
 
     // start the Express server
     app.listen(5200, () => {
