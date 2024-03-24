@@ -1,7 +1,5 @@
-
 .parent {
-    margin: 1rem;
-    padding: 2rem 2rem;
+    padding: 1.5rem 2rem;
     text-align: center;
 }
 #sidepanel {
@@ -23,12 +21,7 @@ svg {
     border: 2px solid black;
     vertical-align: top;
 }
-header {
-    margin: 1rem;
-    border-bottom: 1px solid black;
-    text-align-last: center;
-    width: 98%;
-}
+
 .search {
 
     right: 10%;
