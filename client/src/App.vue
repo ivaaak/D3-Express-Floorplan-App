@@ -2,12 +2,14 @@
   <main>
     <HeaderMenu></HeaderMenu>
     <div class='parent'>
-      <div id="demo">
-        <div id="sidepanel">
-          <AddEmployee></AddEmployee>
-          <ManageDesks></ManageDesks>
-          <Calendar></Calendar>
-        </div>
+      <div id="floorplanContainer">
+        <FloorplanHeader></FloorplanHeader>
+        <div id="demo"></div>
+      </div>
+      <div id="sidepanel">
+        <AddEmployee></AddEmployee>
+        <ManageDesks></ManageDesks>
+        <Calendar></Calendar>
       </div>
     </div>
   </main>
@@ -18,14 +20,17 @@ import AddEmployee from './components/AddEmployee.vue';
 import ManageDesks from './components/ManageDesks.vue';
 import Calendar from './components/Calendar.vue';
 import HeaderMenu from './components/HeaderMenu.vue';
+import FloorplanHeader from './components/FloorplanHeader.vue';
+
 
 export default {
- components: {
+  components: {
     AddEmployee,
     ManageDesks,
     Calendar,
-    HeaderMenu
- },
+    HeaderMenu,
+    FloorplanHeader
+  },
 };
 </script>
 

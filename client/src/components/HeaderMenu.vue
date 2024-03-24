@@ -50,9 +50,11 @@
  display: flex;
  justify-content: space-between;
  align-items: center;
- padding: 10px;
+ margin-top: 10px;
+ padding: 10px 30px 10px 30px;
  background-color: #f8f9fa;
  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+ border-radius: 32px;
 }
 
 .title {

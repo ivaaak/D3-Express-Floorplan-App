@@ -1,13 +1,11 @@
 <template>
     <div class="wrap">
-       <div id="app">
-         <h1>CALENDAR</h1>
          <div class="calendar">
            <div class="calendar__header">
              <a href="javascript:;" class="arrow-btn btn-prevmonth" @click.prevent="changeMonth(false)">Prev</a>
              <div class="calendar__title" @click.prevent="backToToday()">
-               <span class="caption-year">{{current.year}} 年</span>
-               <span class="caption-month">{{convertTwoDigits}} 月</span>
+                <span class="caption-month"> month {{convertTwoDigits}}</span>
+               <span class="caption-year"> year {{current.year}}</span>
              </div>
              <a href="javascript:;" class="arrow-btn btn-nextmonth" @click.prevent="changeMonth(true)">Next</a>
            </div>
@@ -24,16 +22,7 @@
              </ul>
            </div>
          </div>
-         <div class="todolist">
-           <div class="todolist__header">
-             <span class="caption-year">{{current.year}}年</span>
-             <span class="caption-month">{{current.month}}月</span>
-             <span class="caption-date">{{current.date}}日</span>
-           </div>
-           <div class="todolist__body"></div>
          </div>
-       </div>
-    </div>
    </template>
    
    <script>
@@ -189,19 +178,6 @@
     $color-gray: #F2F2F2;
     $color-gray-default: #E5E5E5;
     $color-gray-dark: #929292;
-
-    /* Base */
-    body {
-        font-size: 16px;
-        line-height: 1.4em;
-        letter-spacing: 0.5px;
-        overflow-x: hidden;
-        overflow-y: auto;
-        -webkit-overflow-scrolling: touch;
-        -o-overflow-scrolling: touch;
-        background-color: $color-black;
-        color: $color-black;
-    }
 
     ul {
         list-style: none;
