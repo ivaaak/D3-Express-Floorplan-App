@@ -6,31 +6,27 @@
         <FloorplanHeader></FloorplanHeader>
         <div id="demo"></div>
       </div>
-      <div id="sidepanel">
-        <AddEmployee></AddEmployee>
-        <ManageDesks></ManageDesks>
-        <Calendar></Calendar>
-      </div>
+      <Accordion id="sidepanel">
+      </Accordion>
     </div>
   </main>
 </template>
 
 <script>
-import AddEmployee from './components/AddEmployee.vue';
 import ManageDesks from './components/ManageDesks.vue';
 import Calendar from './components/Calendar.vue';
 import HeaderMenu from './components/HeaderMenu.vue';
 import FloorplanHeader from './components/FloorplanHeader.vue';
-
+import Accordion from './components/Accordion.vue'
 
 export default {
   components: {
-    AddEmployee,
     ManageDesks,
     Calendar,
     HeaderMenu,
-    FloorplanHeader
-  },
+    FloorplanHeader,
+    Accordion
+  }
 };
 </script>
 

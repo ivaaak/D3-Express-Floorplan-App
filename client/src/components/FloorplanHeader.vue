@@ -1,6 +1,8 @@
 <template>
     <div class="projects-section-header">
-        <p>Office: Blubito AG</p>
+        <p>Office: Blubito AG
+            <button  @click="openDialog()"> ✎ </button>
+        </p>
         <p class="time">Todays Date: {{ currentTime }}</p>
     </div>
     <div class="projects-section-line">
@@ -26,8 +28,30 @@
 </template>
 
 <script>
+import ModalDialog from './ModalDialog.vue';
 import moment from 'moment';
 export default {
+    components: {
+        ModalDialog,
+    },
+    data() {
+        return {
+            showModal: false,
+            modalTitle: '',
+            modalMessage: '',
+        };
+    },
+    methods: {
+        openDialog() {
+            this.modalTitle = 'Dialog';
+            this.modalMessage = "Edit the office:";
+            this.showModal = true;
+        },
+        closeModal() {
+            this.showModal = false;
+        },
+    },
+
     computed: {
         currentTime() {
             return moment().format('DD MM YYYY HH:mm');

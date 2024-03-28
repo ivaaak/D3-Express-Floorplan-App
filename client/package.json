@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@coreui/vue": "^4.10.2",
     "axios": "^1.6.8",
     "d3": "^7.9.0",
     "moment": "^2.30.1",

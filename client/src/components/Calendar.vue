@@ -206,14 +206,6 @@ h1 {
   color: $color-black;
   text-align: center;
 }
-
-/* Wrap */
-.wrap {
-  width: calc(100% - 20px);
-  max-width: 420px;
-  margin: auto;
-}
-
 /* Calendar */
 .calendar {
   margin: 1rem 0px;

@@ -1,9 +1,5 @@
 @import url("https://fonts.googleapis.com/css?family=DM+Sans:400,500,700&display=swap");
 
-* {
-  box-sizing: border-box;
-}
-
 :root {
   --app-container: #f3f6fd;
   --main-color: #1f1c2e;
@@ -46,10 +42,6 @@
 }
 
 body {
-  font-family: 'DM Sans', sans-serif;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
   background-color: var(--app-container);
 }
 
@@ -58,48 +50,27 @@ body {
   background-color: transparent;
 }
 
-.parent {
-  padding: 1.5rem 2rem;
-  text-align: center;
-
-  #floorplanContainer {
-    display: inline-block;
-    border-radius: 32px;
-    background-color: white;
-    vertical-align: top;
-    margin-right: 32px;
-  }
-
-  #sidepanel {
-    display: inline-block;
-    background-color: white;
-    border-radius: 32px;
-    vertical-align: top;
-    margin-right: 20px;
-    height: 30%;
-  }
-
-  #manage {
-    display: inline-block;
-    vertical-align: baseline;
-    margin-right: 20px;
-    height: 30%;
-  }
-
+#floorplanContainer {
+  display: inline-grid;
+  border-radius: 32px;
+  background-color: white;
+  vertical-align: top;
+  margin: 1rem;
   svg {
-    display: inline-block;
     border-radius: 32px;
     vertical-align: top;
     border-top: 1px solid black;
   }
-
 }
 
-
-
-.search {
-  right: 10%;
-  width: 30%;
+#sidepanel {
+  display: inline-grid;
+  margin: 1rem;
+  background-color: white;
+  border-radius: 32px;
+  vertical-align: top;
+  width: 25%;
+  height: 30%;
 }
 
 a {
