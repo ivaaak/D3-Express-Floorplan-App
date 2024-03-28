@@ -1,21 +1,25 @@
 <template>
     <div class="projects-section-header">
         <p>Office: Blubito AG</p>
-        <p class="time">Date: {{ currentTime }}</p>
+        <p class="time">Todays Date: {{ currentTime }}</p>
     </div>
     <div class="projects-section-line">
         <div class="projects-status">
             <div class="item-status">
-                <span class="status-number">21</span>
                 <span class="status-type">Reserved</span>
+                <span class="status-number">21</span>
             </div>
             <div class="item-status">
-                <span class="status-number">11</span>
                 <span class="status-type">Free</span>
+                <span class="status-number">11</span>
             </div>
             <div class="item-status">
-                <span class="status-number">32</span>
                 <span class="status-type">Total Desks</span>
+                <span class="status-number">32</span>
+            </div>
+            <div class="item-status">
+                <span class="status-type">Calendar Chosen Date:</span>
+                <span class="status-number">32</span>
             </div>
         </div>
     </div>
