@@ -5,6 +5,8 @@
       <div id="floorplanContainer">
         <FloorplanHeader></FloorplanHeader>
         <div id="demo"></div>
+        <div id="tooltip" style="position: absolute; opacity: 0;"></div>
+
       </div>
       <Accordion id="sidepanel">
       </Accordion>

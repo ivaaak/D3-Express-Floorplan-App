@@ -1,7 +1,7 @@
 <template>
     <section class="accordion" id="sidepanel">
         <div class="tab-header">
-            <h1> Accordion Title</h1>
+            <h1> Management: </h1>
         </div>
         <div class="tab">
             <input type="checkbox" name="accordion-1" id="cb1" checked>
@@ -55,7 +55,14 @@
 }
 
 /* Core styles/functionality */
+.tab {
+    width:24vw;
+    margin: 4px;
+}
+
 .tab-header {
+    width:25vw;
+    text-align: left;
     background: var(--theme);
     h1 {
         color: white;
