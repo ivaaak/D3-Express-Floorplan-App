@@ -1,7 +1,7 @@
 <template>
     <section class="accordion" id="sidepanel">
         <div class="tab-header">
-            <h1> Management: </h1>
+            <h1> Manage: </h1>
         </div>
         <div class="tab">
             <input type="checkbox" name="accordion-1" id="cb1" checked>
@@ -29,9 +29,12 @@
             <label for="cb4" class="tab__label">Upload Floorplan</label>
             <div class="tab__content">
                 <form action="upload" method="POST">
-                    <input type="file" multiple>
-                    <p>Drag your files here or click in this area.</p>
-                    <button type="submit">Upload</button>
+                   
+                    <p>
+                        Drag your files here or click in this area.
+                        <input id="uploadWindow" type="file" multiple>
+                    </p>
+                    <button id="uploadButton" type="submit">Upload</button>
                 </form>
             </div>
         </div>
@@ -56,22 +59,27 @@
 
 /* Core styles/functionality */
 .tab {
-    width:24vw;
+    width: 24vw;
     margin: 4px;
 }
 
 .tab-header {
-    width:25vw;
+    width: 25vw;
     text-align: left;
     background: var(--theme);
+
     h1 {
         color: white;
     }
 }
+
 .tab input {
     position: absolute;
     opacity: 0;
-    z-index: -1;
+    z-index: 10;
+    border: 2px solid red;
+    width: 100%;
+    height: 100%;
 }
 
 .tab__content {
@@ -98,6 +106,7 @@
     color: var(--theme);
     background: white;
     cursor: pointer;
+    font-size: 20px;
 }
 
 .tab__label {
@@ -162,36 +171,21 @@ form p {
     border: 4px dashed black;
 }
 
-form input {
+#uploadWindow {
     position: absolute;
-    width: 100%;
-    height: 100%;
-    outline: none;
+    transform: translatex(-84%);
     opacity: 0;
+    z-index: 10;
+    /* border: 2px solid red; */
+    width: 22%;
+    height: 16%;
 }
 
-form button {
-    color: #fff;
-    background: #16a085;
-    border: none;
-    width: 508px;
-    height: 35px;
-    margin-top: -20px;
-    margin-left: -4px;
+#uploadButton {
+    margin: 0px;
     border-radius: 4px;
-    border-bottom: 4px solid #117A60;
     transition: all .2s ease;
-    outline: none;
     margin: 1rem;
-}
-
-form button:hover {
-    background: #149174;
-    color: #0C5645;
-}
-
-form button:active {
-    border: 0;
 }
 </style>
 

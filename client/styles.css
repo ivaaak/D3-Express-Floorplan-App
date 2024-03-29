@@ -53,7 +53,8 @@ body {
 #floorplanContainer {
   display: inline-grid;
   border-radius: 32px;
-  background-color: white;
+  background-color: #227093;
+  color: white;
   vertical-align: top;
   margin: 1rem;
   svg {
@@ -107,3 +108,26 @@ div.tooltip {
   box-shadow: 5px 5px 5px #888888;
   pointer-events: none;
 }
+
+
+/* Styling for the submit button */
+button[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+ }
+ 
+button[type="submit"]:hover {
+  background-color: #45a049;
+ }
+ 
+button[type="submit"]:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+ }

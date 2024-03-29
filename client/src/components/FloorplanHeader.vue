@@ -1,7 +1,7 @@
 <template>
     <div class="projects-section-header">
         <p>Office: Blubito AG
-            <button  @click="openDialog()"> ✎ </button>
+            <button @click="openDialog()"> ✎ </button>
         </p>
         <p class="time">Todays Date: {{ currentTime }}</p>
     </div>
@@ -22,6 +22,12 @@
             <div class="item-status">
                 <span class="status-type">Calendar Chosen Date:</span>
                 <span class="status-number">32</span>
+            </div>
+        </div>
+        <div class="projects-status">
+            <div class="item-status">
+                <span class="status-type">Date Selected:</span>
+                <span class="status-number">Date clicked on calendar here</span>
             </div>
         </div>
     </div>
@@ -61,16 +67,16 @@ export default {
 </script>
 
 <style>
-.projects-section {
+/* .projects-section {
     flex: 2;
-    background-color: var(--projects-section);
+    background-color: #227093;
     border-radius: 32px;
     padding: 32px 32px 0 32px;
     overflow: hidden;
     height: 100%;
     display: flex;
     flex-direction: column;
-}
+} */
 
 .projects-section-line {
     width: 90%;
@@ -90,7 +96,7 @@ export default {
     align-items: center;
     margin-bottom: 12px;
     margin-top: 12px;
-    color: var(--main-color);
+    color: white;
 }
 
 .projects-section-header p {
@@ -99,7 +105,7 @@ export default {
     font-weight: 700;
     opacity: 0.9;
     margin: 0;
-    color: var(--main-color);
+    color: white;
 }
 
 .projects-section-header .time {
@@ -114,6 +120,7 @@ export default {
     display: flex;
     flex-direction: column;
     margin-right: 16px;
+    color: white;
 }
 
 .item-status:not(:last-child) .status-type:after {
@@ -132,12 +139,12 @@ export default {
     font-size: 24px;
     line-height: 32px;
     font-weight: 700;
-    color: var(--main-color);
+    color: white;
 }
 
 .status-type {
     position: relative;
     padding-right: 24px;
-    color: var(--secondary-color);
+    color: white;
 }
 </style>
