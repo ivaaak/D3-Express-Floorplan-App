@@ -4,7 +4,12 @@ import { Office } from "./models/office";
 import { Desk } from "./models/desk";
 import { Reservation } from "./models/reservation";
 import { Floorplan } from "./models/floorplan";
+import { employeeJsonSchema } from "./dbSchemaValidations/employeeSchema";
 import * as fs from 'fs';
+import { officeJsonSchema } from "./dbSchemaValidations/officeSchema";
+import { deskJsonSchema } from "./dbSchemaValidations/deskSchema";
+import { reservationJsonSchema } from "./dbSchemaValidations/reservationSchema";
+import { floorplanJsonSchema } from "./dbSchemaValidations/floorplanSchema";
 
 export const collections: {
     employees?: mongodb.Collection<Employee>;
@@ -33,37 +38,15 @@ export async function connectToDatabase(uri: string) {
 
     const reservationsCollection = db.collection<Reservation>("reservations");
     collections.reservations = reservationsCollection;
+
+    const floorplansCollection = db.collection<Floorplan>("floorplans");
+    collections.floorplans = floorplansCollection;
 }
 
 
 // Update our existing collection with JSON schema validation so we know our documents will always match the shape of our Employee model, even if added elsewhere.
 // For more information about schema validation, see this blog series: https://www.mongodb.com/blog/post/json-schema-validation--locking-down-your-model-the-smart-way
 async function applySchemaValidation(db: mongodb.Db) {
-    const employeeJsonSchema = {
-        $jsonSchema: {
-            bsonType: "object",
-            required: ["name", "position", "level"],
-            additionalProperties: false,
-            properties: {
-                _id: {},
-                name: {
-                    bsonType: "string",
-                    description: "'name' is required and is a string",
-                },
-                position: {
-                    bsonType: "string",
-                    description: "'position' is required and is a string",
-                    minLength: 5
-                },
-                level: {
-                    bsonType: "string",
-                    description: "'level' is required and is one of 'junior', 'mid', or 'senior'",
-                    enum: ["junior", "mid", "senior"],
-                },
-            },
-        },
-    };
-
     // Try applying the modification to the collection, if the collection doesn't exist, create it 
     await db.command({
         collMod: "employees",
@@ -74,38 +57,7 @@ async function applySchemaValidation(db: mongodb.Db) {
         }
     });
 
-    // Schema validation for offices
-    const officeJsonSchema = {
-        $jsonSchema: {
-            bsonType: "object",
-            required: ["name", "imageUrls", "chosenFloorplan"],
-            additionalProperties: false,
-            properties: {
-                _id: {},
-                name: {
-                    bsonType: "string",
-                    description: "'name' is required and is a string",
-                },
-                imageUrls: {
-                    bsonType: "array",
-                    description: "'imageUrls' is required and is an array of strings",
-                    items: {
-                        bsonType: "string",
-                    },
-                },
-                chosenFloorplan: {
-                    bsonType: "string",
-                    description: "'chosenFloorplan' is required and is a string",
-                },
-                desks: {
-                    bsonType: "array",
-                    description: "'desks' is an array of Desk objects",
-                },
-            },
-        },
-    };
 
-    // Apply schema validation for each collection
     await db.command({
         collMod: "offices",
         validator: officeJsonSchema
@@ -115,46 +67,6 @@ async function applySchemaValidation(db: mongodb.Db) {
         }
     });
 
-
-
-
-    // Schema validation for desks
-    const deskJsonSchema = {
-        $jsonSchema: {
-            bsonType: "object",
-            required: ["name", "officeId", "coordinates"],
-            additionalProperties: false,
-            properties: {
-                _id: {},
-                name: {
-                    bsonType: "string",
-                    description: "'name' is required and is a string",
-                },
-                officeId: {
-                    bsonType: "objectId",
-                    description: "'officeId' is required and is an ObjectId",
-                },
-                coordinates: {
-                    bsonType: "array",
-                    description: "'coordinates' is required and is an array of coordinate pairs",
-                    items: {
-                        bsonType: "object",
-                        required: ["x", "y"],
-                        properties: {
-                            x: {
-                                bsonType: "int",
-                                description: "'x' is required and is an integer",
-                            },
-                            y: {
-                                bsonType: "int",
-                                description: "'y' is required and is an integer",
-                            },
-                        },
-                    },
-                },
-            },
-        },
-    };
 
     await db.command({
         collMod: "desks",
@@ -166,37 +78,6 @@ async function applySchemaValidation(db: mongodb.Db) {
     });
 
 
-
-
-
-    // Schema validation for reservations
-    const reservationJsonSchema = {
-        $jsonSchema: {
-            bsonType: "object",
-            required: ["deskId", "startDate", "endDate", "employeeId"],
-            additionalProperties: false,
-            properties: {
-                _id: {},
-                deskId: {
-                    bsonType: "objectId",
-                    description: "'deskId' is required and is an ObjectId",
-                },
-                startDate: {
-                    bsonType: "date",
-                    description: "'startDate' is required and is a date",
-                },
-                endDate: {
-                    bsonType: "date",
-                    description: "'endDate' is required and is a date",
-                },
-                employeeId: {
-                    bsonType: "objectId",
-                    description: "'employeeId' is required and is an ObjectId",
-                },
-            },
-        },
-    };
-
     await db.command({
         collMod: "reservations",
         validator: reservationJsonSchema
@@ -207,116 +88,6 @@ async function applySchemaValidation(db: mongodb.Db) {
     });
 
 
-
-
-
-    // Schema validation for floorplans
-    const floorplanJsonSchema = {
-        $jsonSchema: {
-            bsonType: "object",
-            required: ["data"],
-            additionalProperties: false,
-            properties: {
-                _id: {},
-                data: {
-                    bsonType: "object",
-                    required: ["heatmap", "overlays"],
-                    additionalProperties: false,
-                    properties: {
-                        heatmap: {
-                            bsonType: "object",
-                            required: ["binSize", "units", "map"],
-                            additionalProperties: false,
-                            properties: {
-                                binSize: {
-                                    bsonType: "double",
-                                },
-                                units: {
-                                    bsonType: "string",
-                                },
-                                map: {
-                                    bsonType: "array",
-                                    items: {
-                                        bsonType: "object",
-                                        required: ["x", "y"],
-                                        additionalProperties: false,
-                                        properties: {
-                                            x: {
-                                                bsonType: "double",
-                                            },
-                                            y: {
-                                                bsonType: "double",
-                                            },
-                                            value: {
-                                                bsonType: "double",
-                                            },
-                                            points: {
-                                                bsonType: "array",
-                                                items: {
-                                                    bsonType: "object",
-                                                    required: ["x", "y"],
-                                                    additionalProperties: false,
-                                                    properties: {
-                                                        x: {
-                                                            bsonType: "double",
-                                                        },
-                                                        y: {
-                                                            bsonType: "double",
-                                                        },
-                                                    },
-                                                },
-                                            },
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                        overlays: {
-                            bsonType: "object",
-                            required: ["polygons"],
-                            additionalProperties: false,
-                            properties: {
-                                polygons: {
-                                    bsonType: "array",
-                                    items: {
-                                        bsonType: "object",
-                                        required: ["id", "name", "points"],
-                                        additionalProperties: false,
-                                        properties: {
-                                            id: {
-                                                bsonType: "string",
-                                            },
-                                            name: {
-                                                bsonType: "string",
-                                            },
-                                            points: {
-                                                bsonType: "array",
-                                                items: {
-                                                    bsonType: "object",
-                                                    required: ["x", "y"],
-                                                    additionalProperties: false,
-                                                    properties: {
-                                                        x: {
-                                                            bsonType: "double",
-                                                        },
-                                                        y: {
-                                                            bsonType: "double",
-                                                        },
-                                                    },
-                                                },
-                                            },
-                                        },
-                                    },
-                                },
-                            },
-                        },
-                    },
-                },
-            },
-        },
-    };
-
-    // Try applying the modification to the collection, if the collection doesn't exist, create it 
     await db.command({
         collMod: "floorplans",
         validator: floorplanJsonSchema
@@ -331,15 +102,18 @@ async function applySchemaValidation(db: mongodb.Db) {
 export async function migrateFloorplanData() {
     try {
         // Read the JSON file
-        const data = fs.readFileSync('data.json', 'utf8');
+        const filePath = '../client/src/data/data.json';
+        const data = fs.readFileSync(filePath, 'utf8');
         const floorplanData: Floorplan = JSON.parse(data);
 
+        console.log("floorplanData", JSON.stringify(floorplanData, null, 2));
         // Prepare the data to match the Floorplan model
         // Adjust the structure to match the Floorplan model directly
         const floorplan: Floorplan = {
             heatmap: floorplanData.heatmap,
             overlays: floorplanData.overlays,
         };
+        console.log("floorplan", floorplan)
 
         // Insert the data into the floorplans collection
         if (collections.floorplans) {
