@@ -5,26 +5,25 @@ export interface Point {
     y: number;
     value?: number;
     points?: Point[];
-   }
-   
-   export interface Heatmap {
+}
+
+export interface Heatmap {
     binSize: number;
     units: string;
     map: Point[];
-   }
-   
-   export interface Polygon {
+}
+
+export interface Polygon {
     id: string;
     name: string;
     points: Point[];
-   }
-   
-   export interface Overlays {
+}
+
+export interface Overlays {
     polygons: Polygon[];
-   }
-   
-   export interface JsonData {
+}
+
+export interface Floorplan {
     heatmap: Heatmap;
     overlays: Overlays;
-   }
-   
+}
