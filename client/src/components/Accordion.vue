@@ -1,32 +1,56 @@
 <template>
     <section class="accordion" id="sidepanel">
         <div class="tab-header">
-            <h1> Manage: </h1>
+            <h1> Reserve: </h1>
         </div>
         <div class="tab">
-            <input type="checkbox" name="accordion-1" id="cb1" checked>
-            <label for="cb1" class="tab__label">Manage Employees</label>
-            <div class="tab__content">
-                <AddEmployee></AddEmployee>
-            </div>
-        </div>
-        <div class="tab">
-            <input type="checkbox" name="accordion-2" id="cb2" checked>
-            <label for="cb2" class="tab__label">Manage Desks</label>
-            <div class="tab__content">
-                <ManageDesks></ManageDesks>
-            </div>
-        </div>
-        <div class="tab">
-            <input type="checkbox" name="accordion-3" id="cb3" checked>
-            <label for="cb3" class="tab__label">Calendar</label>
+            <input class="transparentInput" type="checkbox" name="accordion-1" id="cb1"> <!-- checked to default open-->
+            <label for="cb1" class="tab__label">Calendar</label>
             <div class="tab__content">
                 <Calendar></Calendar>
             </div>
         </div>
         <div class="tab">
-            <input type="checkbox" name="accordion-4" id="cb4" checked>
-            <label for="cb4" class="tab__label">Upload Floorplan</label>
+            <input class="transparentInput" type="checkbox" name="accordion-2" id="cb2">
+            <label for="cb2" class="tab__label">Pick a Desk</label>
+            <div class="tab__content">
+                <DeskPicker></DeskPicker>
+            </div>
+        </div>
+        <div class="tab">
+            <input class="transparentInput" type="checkbox" name="accordion-3" id="cb3">
+            <label for="cb3" class="tab__label">Chat</label>
+            <div class="tab__content">
+                CHAT???
+            </div>
+        </div>
+        <div class="tab-header">
+            <h1> Manage: </h1>
+        </div>
+        <div class="tab">
+            <input class="transparentInput" type="checkbox" name="accordion-4" id="cb4"> <!-- checked to default open-->
+            <label for="cb4" class="tab__label">Manage Employees</label>
+            <div class="tab__content">
+                <AddEmployee></AddEmployee>
+            </div>
+        </div>
+        <div class="tab">
+            <input class="transparentInput" type="checkbox" name="accordion-5" id="cb5">
+            <label for="cb5" class="tab__label">Manage Desks</label>
+            <div class="tab__content">
+                <ManageDesks></ManageDesks>
+            </div>
+        </div>
+        <div class="tab">
+            <input class="transparentInput" type="checkbox" name="accordion-6" id="cb6">
+            <label for="cb6" class="tab__label">Manage Floorplans</label>
+            <div class="tab__content">
+                <ManageFloorplans></ManageFloorplans>
+            </div>
+        </div>
+        <div class="tab">
+            <input class="transparentInput" type="checkbox" name="accordion-7" id="cb7">
+            <label for="cb7" class="tab__label">Upload Floorplan</label>
             <div class="tab__content">
                 <form action="upload" method="POST">
                    
@@ -34,7 +58,7 @@
                         Drag your files here or click in this area.
                         <input id="uploadWindow" type="file" multiple>
                     </p>
-                    <button id="uploadButton" type="submit">Upload</button>
+                    <button id="uploadButton" class="wideButton" type="submit">Upload</button>
                 </form>
             </div>
         </div>
@@ -73,13 +97,11 @@
     }
 }
 
-.tab input {
+.tab .transparentInput {
     position: absolute;
     opacity: 0;
     z-index: 10;
     border: 2px solid red;
-    width: 100%;
-    height: 100%;
 }
 
 .tab__content {
@@ -88,7 +110,7 @@
     transition: all 0.35s;
 }
 
-.tab input:checked~.tab__content {
+.tab .transparentInput:checked~.tab__content {
     max-height: 25rem;
 }
 
@@ -124,7 +146,7 @@
     transition: all 0.35s;
 }
 
-.tab input:checked+.tab__label::after {
+.tab .transparentInput:checked+.tab__label::after {
     transform: rotate(270deg);
 }
 
@@ -142,20 +164,6 @@
     --theme: var(--secondary);
 }
 
-/* Arrow animation */
-.tab input:not(:checked)+.tab__label:hover::after {
-    animation: bounce .5s infinite;
-}
-
-@keyframes bounce {
-    25% {
-        transform: rotate(90deg) translate(.25rem);
-    }
-
-    75% {
-        transform: rotate(90deg) translate(-.25rem);
-    }
-}
 
 /* Upload */
 form {
@@ -181,12 +189,6 @@ form p {
     height: 16%;
 }
 
-#uploadButton {
-    margin: 0px;
-    border-radius: 4px;
-    transition: all .2s ease;
-    margin: 1rem;
-}
 </style>
 
 <script>
@@ -195,6 +197,8 @@ import ManageDesks from './ManageDesks.vue';
 import Calendar from './Calendar.vue';
 import HeaderMenu from './HeaderMenu.vue';
 import FloorplanHeader from './FloorplanHeader.vue';
+import ManageFloorplans from './ManageFloorplans.vue';
+import DeskPicker from './DeskPicker.vue';
 
 export default {
     components: {
@@ -202,7 +206,9 @@ export default {
         ManageDesks,
         Calendar,
         HeaderMenu,
-        FloorplanHeader
+        FloorplanHeader,
+        ManageFloorplans,
+        DeskPicker
     }
 }
 </script>

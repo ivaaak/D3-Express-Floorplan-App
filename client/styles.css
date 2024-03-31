@@ -2,6 +2,8 @@
 
 :root {
   --app-container: #f3f6fd;
+  /* --primary: #4f9ec3; */
+  --primary: #227093;
   --main-color: #1f1c2e;
   --secondary-color: #4A4A4A;
   --link-color: #1f1c2e;
@@ -15,13 +17,14 @@
   --more-list-bg-hover: #f6fbff;
   --more-list-shadow: rgba(209, 209, 209, 0.4);
   --button-bg: #1f1c24;
+  /* --button: #227093; */
+  --button: #4f9ec3;
   --search-area-bg: #fff;
   --star: #1ff1c2e;
   --message-btn: #fff;
 }
 
 .dark:root {
-  --app-container: #1f1d2b;
   --app-container: #111827;
   --main-color: #fff;
   --secondary-color: rgba(255, 255, 255, .8);
@@ -51,13 +54,16 @@ body {
 }
 
 #floorplanContainer {
+  width: 71.5%;
   display: inline-grid;
   border-radius: 32px;
-  background-color: #227093;
+  background-color: var(--primary);
   color: white;
   vertical-align: top;
   margin: 1rem;
+
   svg {
+    width: 100%;
     border-radius: 32px;
     vertical-align: top;
     border-top: 1px solid black;
@@ -111,23 +117,72 @@ div.tooltip {
 
 
 /* Styling for the submit button */
-button[type="submit"] {
+.wideButton {
   width: 100%;
   padding: 10px;
-  background-color: #4CAF50;
+  margin-bottom: 2px;
+  margin-top: 2px;
+  background-color: var(--button);
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
   transition: background-color 0.3s ease;
- }
- 
-button[type="submit"]:hover {
-  background-color: #45a049;
- }
- 
-button[type="submit"]:disabled {
+}
+
+.wideButton:hover {
+  background-color: var(--button);
+}
+
+.wideButton:disabled {
   background-color: #ccc;
   cursor: not-allowed;
- }
+}
+
+.narrowButton {
+  width: 120px;
+  padding: 2px;
+  margin: 2px;
+  background-color: var(--button);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.narrowButton:hover {
+  background-color: var(--button);
+}
+
+.narrowButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+  margin: 2px;
+}
+
+.listItem {
+  background-color: var(--app-container);
+  margin: 2px;
+  border-radius: 2px;
+  color: black;
+}
+
+/* D3 Map Stuff */
+.map-controls {
+  transform: translatex(93%);
+  transform: translatey(1%);
+  width: 100px;
+  height: 100px;
+  background-color: var(--primary);
+}

@@ -1,7 +1,7 @@
 // employeeService.js
 import axios from 'axios';
 
-const url = 'http://localhost:5200';
+const url = 'http://localhost:3000';
 
 export default {
   data() {

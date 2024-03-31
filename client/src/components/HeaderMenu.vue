@@ -52,7 +52,7 @@ export default {
   align-items: center;
   padding: 10px 30px 10px 30px;
   margin: 10px 16px 0px 16px;
-  background-color: #227093;
+  background-color: var(--primary);
   color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 32px;

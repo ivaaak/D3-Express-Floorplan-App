@@ -126,6 +126,8 @@ var loadData = function (data) {
     d3.select("#startSelection").on("click", startPointSelection);
 
 
+    
+
     // Existing event listeners for mouseover and click on polygons and overlay canvas
 
     // Hover tooltip on polygon layer
@@ -145,15 +147,14 @@ var loadData = function (data) {
                 .style("opacity", 0);
         })
 
-    // Click event listener for debugging
-    d3.select('.overlay-canvas')
-        .on("click", function (d) {
-            console.log("page xpos:", (d3.event.pageX), "  ypos:", (d3.event.pageY));
-            console.log("layer xpos:", (d3.event.layerX), "  ypos:", (d3.event.layerY));
-            console.log("offset xpos:", (d3.event.offsetX), "  ypos:", (d3.event.offsetY));
-            console.log("x:", (d3.event.x), "  y:", (d3.event.y));
-
-        });
+    // // Click event listener for debugging
+    // d3.select('.overlay-canvas')
+    //     .on("click", function (d) {
+    //         console.log("page xpos:", (d3.event.pageX), "  ypos:", (d3.event.pageY));
+    //         console.log("layer xpos:", (d3.event.layerX), "  ypos:", (d3.event.layerY));
+    //         console.log("offset xpos:", (d3.event.offsetX), "  ypos:", (d3.event.offsetY));
+    //         console.log("x:", (d3.event.x), "  y:", (d3.event.y));
+    //     });
 
 };
 

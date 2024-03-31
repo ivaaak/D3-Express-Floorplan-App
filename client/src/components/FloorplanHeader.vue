@@ -67,17 +67,6 @@ export default {
 </script>
 
 <style>
-/* .projects-section {
-    flex: 2;
-    background-color: #227093;
-    border-radius: 32px;
-    padding: 32px 32px 0 32px;
-    overflow: hidden;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-} */
-
 .projects-section-line {
     width: 90%;
     margin-left: 5%;
