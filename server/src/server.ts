@@ -9,7 +9,7 @@ import { migrateFloorplanData } from './database'; // Import the migration funct
 dotenv.config();
 const { ATLAS_URI } = process.env;
 const app = express();
-const port = 5200;
+const port = 3000;
 
 if (!ATLAS_URI) {
   console.error(

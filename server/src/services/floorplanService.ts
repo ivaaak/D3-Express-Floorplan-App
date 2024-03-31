@@ -5,7 +5,7 @@ import { Point, Polygon } from '../models/floorplan';
 const floorplanService = express.Router();
 
 // Define your endpoints here
-floorplanService.get('/', async (req, res) => {
+floorplanService.get('/floorplan', async (req, res) => {
    try {
        const floorplans = await collections.floorplans?.find().toArray();
        res.json(floorplans);

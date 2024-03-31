@@ -1,0 +1,370 @@
+Desk:
+{
+    "_id": {
+        "$oid": "65febcaa5f39a20c439ff0ea"
+    },
+    "name": "test desk name",
+    "officeId": {
+        "$oid": "60febcaa5f39a20c439ff0ea"
+    },
+    "coordinates": [
+        {
+            "x": 12,
+            "y": 12
+        }
+    ]
+}
+
+Employee: 
+{
+    "_id": {
+        "$oid": "65febcaa5f39a20c439ff0ea"
+    },
+    "name": "Ivo",
+    "position": "Develops",
+    "level": "senior"
+}
+
+Floorplan: 
+{
+    "_id": {
+        "$oid": "66086bc7b94718ed9fbdb543"
+    },
+    "heatmap": {
+        "binSize": {
+            "$numberDouble": "1.5"
+        },
+        "units": "°C",
+        "map": [
+            {
+                "x": {
+                    "$numberInt": "2"
+                },
+                "y": {
+                    "$numberInt": "22"
+                },
+                "value": {
+                    "$numberInt": "22"
+                }
+            },
+            {
+                "x": {
+                    "$numberInt": "2"
+                },
+                "y": {
+                    "$numberInt": "27"
+                },
+                "value": {
+                    "$numberDouble": "20.2"
+                }
+            },
+            {
+                "x": {
+                    "$numberInt": "7"
+                },
+                "y": {
+                    "$numberInt": "22"
+                },
+                "value": {
+                    "$numberDouble": "11.7"
+                }
+            },
+            {
+                "x": {
+                    "$numberInt": "7"
+                },
+                "y": {
+                    "$numberInt": "27"
+                },
+                "value": {
+                    "$numberDouble": "9.7"
+                }
+            },
+            {
+                "x": {
+                    "$numberInt": "12"
+                },
+                "y": {
+                    "$numberInt": "22"
+                },
+                "value": {
+                    "$numberDouble": "20.5"
+                }
+            },
+            {
+                "x": {
+                    "$numberInt": "12"
+                },
+                "y": {
+                    "$numberInt": "27"
+                },
+                "value": {
+                    "$numberDouble": "39.3"
+                }
+            },
+            {
+                "value": {
+                    "$numberDouble": "19.9"
+                },
+                "points": [
+                    {
+                        "x": {
+                            "$numberDouble": "1.2"
+                        },
+                        "y": {
+                            "$numberInt": "11"
+                        }
+                    },
+                    {
+                        "x": {
+                            "$numberDouble": "8.5"
+                        },
+                        "y": {
+                            "$numberInt": "2"
+                        }
+                    },
+                    {
+                        "x": {
+                            "$numberInt": "32"
+                        },
+                        "y": {
+                            "$numberInt": "2"
+                        }
+                    },
+                    {
+                        "x": {
+                            "$numberDouble": "31.5"
+                        },
+                        "y": {
+                            "$numberDouble": "19.5"
+                        }
+                    },
+                    {
+                        "x": {
+                            "$numberDouble": "1.2"
+                        },
+                        "y": {
+                            "$numberDouble": "20.5"
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    "overlays": {
+        "polygons": [
+            {
+                "id": "p1",
+                "name": "kitchen",
+                "points": [
+                    {
+                        "x": {
+                            "$numberDouble": "1.2"
+                        },
+                        "y": {
+                            "$numberInt": "11"
+                        }
+                    },
+                    {
+                        "x": {
+                            "$numberDouble": "8.5"
+                        },
+                        "y": {
+                            "$numberInt": "2"
+                        }
+                    },
+                    {
+                        "x": {
+                            "$numberInt": "32"
+                        },
+                        "y": {
+                            "$numberInt": "2"
+                        }
+                    },
+                    {
+                        "x": {
+                            "$numberInt": "32"
+                        },
+                        "y": {
+                            "$numberDouble": "20.5"
+                        }
+                    },
+                    {
+                        "x": {
+                            "$numberDouble": "1.2"
+                        },
+                        "y": {
+                            "$numberDouble": "20.5"
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "p2",
+                "name": "desk2",
+                "points": [
+                    {
+                        "x": {
+                            "$numberInt": "12"
+                        },
+                        "y": {
+                            "$numberInt": "22"
+                        }
+                    },
+                    {
+                        "x": {
+                            "$numberInt": "12"
+                        },
+                        "y": {
+                            "$numberInt": "24"
+                        }
+                    },
+                    {
+                        "x": {
+                            "$numberInt": "16"
+                        },
+                        "y": {
+                            "$numberInt": "24"
+                        }
+                    },
+                    {
+                        "x": {
+                            "$numberInt": "16"
+                        },
+                        "y": {
+                            "$numberInt": "22"
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "p3",
+                "name": "desk3",
+                "points": [
+                    {
+                        "x": {
+                            "$numberInt": "2"
+                        },
+                        "y": {
+                            "$numberInt": "22"
+                        }
+                    },
+                    {
+                        "x": {
+                            "$numberInt": "2"
+                        },
+                        "y": {
+                            "$numberInt": "24"
+                        }
+                    },
+                    {
+                        "x": {
+                            "$numberInt": "6"
+                        },
+                        "y": {
+                            "$numberInt": "24"
+                        }
+                    },
+                    {
+                        "x": {
+                            "$numberInt": "6"
+                        },
+                        "y": {
+                            "$numberInt": "22"
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "p4",
+                "name": "desk4",
+                "points": [
+                    {
+                        "x": {
+                            "$numberInt": "22"
+                        },
+                        "y": {
+                            "$numberInt": "22"
+                        }
+                    },
+                    {
+                        "x": {
+                            "$numberInt": "22"
+                        },
+                        "y": {
+                            "$numberInt": "24"
+                        }
+                    },
+                    {
+                        "x": {
+                            "$numberInt": "26"
+                        },
+                        "y": {
+                            "$numberInt": "24"
+                        }
+                    },
+                    {
+                        "x": {
+                            "$numberInt": "26"
+                        },
+                        "y": {
+                            "$numberInt": "22"
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "p5",
+                "name": "desk5",
+                "points": [
+                    {
+                        "x": {
+                            "$numberInt": "32"
+                        },
+                        "y": {
+                            "$numberInt": "22"
+                        }
+                    },
+                    {
+                        "x": {
+                            "$numberInt": "32"
+                        },
+                        "y": {
+                            "$numberInt": "24"
+                        }
+                    },
+                    {
+                        "x": {
+                            "$numberInt": "36"
+                        },
+                        "y": {
+                            "$numberInt": "24"
+                        }
+                    },
+                    {
+                        "x": {
+                            "$numberInt": "36"
+                        },
+                        "y": {
+                            "$numberInt": "22"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}
+
+Office: 
+{
+    "_id": {
+        "$oid": "66093e01aba993e2f78cc690"
+    },
+    "name": "Example Office",
+    "imageUrls": [
+        "https://example.com/image1.jpg",
+        "https://example.com/image2.jpg"
+    ],
+    "chosenFloorplan": "floorplan123"
+}
+
