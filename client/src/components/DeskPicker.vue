@@ -1,0 +1,54 @@
+<template>
+    <div>
+        <div>Selected Desk: {{ selectedDesk.name }}</div>
+        <div>With Coordinates: {{ selectedDesk.coordinates }}</div>
+    </div>
+
+
+    <button id="pickDesk" class="wideButton" @click="pickDesk()">
+        Select A Desk To Reserve
+    </button>
+</template>
+
+<script>
+export default {
+    data() {
+        return {
+            selectionActive: false,
+            selectedDesk: {
+                name: "",
+                coordinates: {}
+            }
+        };
+    },
+    methods: {
+        pickDesk() {
+            this.selectionActive = true;
+            // Function to handle polygon click
+            var updateDesk = (name, coordinates) => { // Use an arrow function here
+                this.selectedDesk.name = name;
+                this.selectedDesk.coordinates = coordinates;
+            }
+            var handlePolygonClick = function () {
+                // Check if the clicked element is a polygon
+                var target = d3.event.target;
+                var titleElement = target.querySelector('title');
+
+                if (target.tagName.toLowerCase() === 'path' && target.classList.contains('polygon')) {
+                    // Log the ID and values of the clicked polygon
+                    console.log("Clicked polygon target:", target);
+                    console.log("Clicked polygon values:", target.getAttribute("d"));
+                    if (titleElement) {
+                        updateDesk(titleElement.textContent, target.getAttribute("d"));
+                    } else {
+                        console.log("No title found for the clicked polygon.");
+                    }
+                }
+            };
+
+            // Attach the handlePolygonClick function to the SVG click event
+            d3.select("#demo svg").on("click", handlePolygonClick);
+        }
+    }
+}
+</script>
