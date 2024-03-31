@@ -1,11 +1,11 @@
 import * as mongodb from "mongodb";
+import * as fs from 'fs';
 import { Employee } from "./models/employee";
 import { Office } from "./models/office";
 import { Desk } from "./models/desk";
 import { Reservation } from "./models/reservation";
 import { Floorplan } from "./models/floorplan";
 import { employeeJsonSchema } from "./dbSchemaValidations/employeeSchema";
-import * as fs from 'fs';
 import { officeJsonSchema } from "./dbSchemaValidations/officeSchema";
 import { deskJsonSchema } from "./dbSchemaValidations/deskSchema";
 import { reservationJsonSchema } from "./dbSchemaValidations/reservationSchema";
@@ -90,10 +90,10 @@ async function applySchemaValidation(db: mongodb.Db) {
 
     await db.command({
         collMod: "floorplans",
-        validator: floorplanJsonSchema
+        //validator: floorplanJsonSchema
     }).catch(async (error: mongodb.MongoServerError) => {
         if (error.codeName === "NamespaceNotFound") {
-            await db.createCollection("floorplans", { validator: floorplanJsonSchema });
+            await db.createCollection("floorplans"); //, { validator: floorplanJsonSchema });
         }
     });
 }
@@ -102,7 +102,7 @@ async function applySchemaValidation(db: mongodb.Db) {
 export async function migrateFloorplanData() {
     try {
         // Read the JSON file
-        const filePath = '../client/src/data/data.json';
+        const filePath = '../client/src/data/floorplanData.json';
         const data = fs.readFileSync(filePath, 'utf8');
         const floorplanData: Floorplan = JSON.parse(data);
 

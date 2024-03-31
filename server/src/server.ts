@@ -21,7 +21,7 @@ if (!ATLAS_URI) {
 
 async function startServer() {
   await connectToDatabase(ATLAS_URI!); // Connect to the database
-  await migrateFloorplanData(); // Migrate floorplan data
+  // await migrateFloorplanData(); // Migrate floorplan data
 
   // Use the routes module
   app.use(cors());

@@ -1,4 +1,4 @@
-import jsonData from './floorplanData.json';
+import jsonData from '../data/floorplanData.json';
 console.log(jsonData);
 
 var floorImageUrl = 'https://static.dezeen.com/uploads/2019/05/synchroon-office-space-encounters-interiors-utrecht-netherlands_dezeen_floor-plan.jpg';
