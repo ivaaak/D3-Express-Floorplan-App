@@ -19,7 +19,8 @@ import ManageDesks from './components/ManageDesks.vue';
 import HeaderMenu from './components/HeaderMenu.vue';
 import FloorplanHeader from './components/FloorplanHeader.vue';
 import Accordion from './components/Accordion.vue'
-import jsonData from './data/floorplanData.json';
+import heatmapData from './data/heatmap.json';
+import polygonData from './data/polygons.json';
 
 export default {
   components: {
@@ -40,91 +41,94 @@ export default {
         var img = new Image();
         img.src = this.floorImageUrl;
         img.onload = function () {
-          resolve({ 
+          resolve({
             width: img.width / scaleFactor,
-             height: img.height / scaleFactor });
+            height: img.height / scaleFactor
+          });
         };
         img.onerror = function () {
           reject(new Error('Failed to load image'));
         };
       });
+    },
+    loadTooltipOnPolygons() {
+      var div = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
+      // Hover tooltip on polygon layer
+      d3.select('.polygon')
+        .on("mouseover", function (d) {
+          div.transition()
+            .duration(0)
+            .style("opacity", .9);
+          div.html("Price: <br>" + "<br/>Volume: ")
+            .style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY - 28) + "px");
+          console.log("event", (d3.event))
+        })
+        .on("mouseout", function (d) {
+          div.transition()
+            .duration(0)
+            .style("opacity", 0);
+        })
+    },
+    addDebugD3ClickListener() {
+      // Click event listener for debugging
+      d3.select('.overlay-canvas')
+        .on("click", function (d) {
+          console.log("page xpos:", (d3.event.pageX), "  ypos:", (d3.event.pageY));
+          console.log("layer xpos:", (d3.event.layerX), "  ypos:", (d3.event.layerY));
+          console.log("offset xpos:", (d3.event.offsetX), "  ypos:", (d3.event.offsetY));
+          console.log("x:", (d3.event.x), "  y:", (d3.event.y));
+        });
     }
   },
   async mounted() {
     // Load Image -> Load data -> Build D3 Floorplan map -> Add layers (overlay heatmap polygon)
     const dimensions = await this.getImageDimensions(1.7); // change 1.7 to scale the image
 
-    var xscale = d3.scale.linear().domain([0, 50]).range([0, dimensions.width]),
-      yscale = d3.scale.linear().domain([0, 35]).range([0, dimensions.height]),
+    var xscale = d3.scale.linear().domain([0, 50]).range([0, dimensions.width]);
+    var yscale = d3.scale.linear().domain([0, 35]).range([0, dimensions.height]);
 
-      map = d3.floorplan().xScale(xscale).yScale(yscale),
-      imagelayer = d3.floorplan.imagelayer(),
-      heatmap = d3.floorplan.heatmap(),
-      //vectorfield = d3.floorplan.vectorfield(),
-      //pathplot = d3.floorplan.pathplot(),
-      overlays = d3.floorplan.overlays().editMode(false),
-      mapdata = {};
+    var map = d3.floorplan().xScale(xscale).yScale(yscale);
+    var imagelayer = d3.floorplan.imagelayer();
+    var heatmap = d3.floorplan.heatmap();
+    var overlays = d3.floorplan.overlays().editMode(false);
+    var mapdata = {};
+    //var vectorfield = d3.floorplan.vectorfield();
+    //var pathplot = d3.floorplan.pathplot();
 
-    mapdata[imagelayer.id()] = [{
-      url: this.floorImageUrl,
-      x: 0,
-      y: 0,
-      height: 35,
-      width: 50
-    }];
+    mapdata[imagelayer.id()] = [{ url: this.floorImageUrl, x: 0, y: 0, height: 35, width: 50 }];
 
     // Function to generate the different layers
     map.addLayer(imagelayer).addLayer(heatmap).addLayer(overlays);
-    //.addLayer(vectorfield)
-    //.addLayer(pathplot)
+    //.addLayer(vectorfield).addLayer(pathplot)
 
-    var loadData = function (data) {
-      mapdata[heatmap.id()] = data.heatmap;
-      mapdata[overlays.id()] = data.overlays;
+    var loadData = function (heatmapDataSource, polygonDataSource) {
+      mapdata[heatmap.id()] = heatmapDataSource.heatmap;
+      mapdata[overlays.id()] = polygonDataSource.overlays;
       //mapdata[vectorfield.id()] = data.vectorfield;
       //mapdata[pathplot.id()] = data.pathplot;
-
-      // TODO: add variables for image size
+    };
+    var loadHeatmapData = function (heatmapDataSource) {
+      mapdata[heatmap.id()] = heatmapDataSource.heatmap;
+    };
+    var loadPolygonData = function (polygonDataSource) {
+      mapdata[overlays.id()] = polygonDataSource.overlays;
+    };
+    var generateD3FloorplanMap = function() {
       d3.select("#floorplanSvgContainer").append("svg")
         .attr("height", dimensions.height).attr("width", dimensions.width)
         .datum(mapdata).call(map);
+    }
 
-      // var div = d3.select("body").append("div")
-      //   .attr("class", "tooltip")
-      //   .style("opacity", 0);
-
-
-      // // Hover tooltip on polygon layer
-      // d3.select('.polygon')
-      //   .on("mouseover", function (d) {
-      //     div.transition()
-      //       .duration(0)
-      //       .style("opacity", .9);
-      //     div.html("Price: <br>" + "<br/>Volume: ")
-      //       .style("left", (d3.event.pageX) + "px")
-      //       .style("top", (d3.event.pageY - 28) + "px");
-      //     console.log("event", (d3.event))
-      //   })
-      //   .on("mouseout", function (d) {
-      //     div.transition()
-      //       .duration(0)
-      //       .style("opacity", 0);
-      //   })
-
-      // // Click event listener for debugging
-      // d3.select('.overlay-canvas')
-      //     .on("click", function (d) {
-      //         console.log("page xpos:", (d3.event.pageX), "  ypos:", (d3.event.pageY));
-      //         console.log("layer xpos:", (d3.event.layerX), "  ypos:", (d3.event.layerY));
-      //         console.log("offset xpos:", (d3.event.offsetX), "  ypos:", (d3.event.offsetY));
-      //         console.log("x:", (d3.event.x), "  y:", (d3.event.y));
-      //     });
-    };
-
-    loadData(jsonData);
+    loadHeatmapData(heatmapData);
+    loadPolygonData(polygonData);
+    //loadData(heatmapData, polygonData);
+    this.loadTooltipOnPolygons();
+    //this.addDebugD3ClickListener();
+    generateD3FloorplanMap();
   }
 }
-
 </script>
-
-<style scoped></style>

@@ -368,3 +368,97 @@ Office:
     "chosenFloorplan": "floorplan123"
 }
 
+
+Reserve: 
+{
+    "_id": {
+        "$oid": "660ada36efebdef829288d01"
+    },
+    "deskId": {
+        "$oid": "60d5ecb8b392d23410a8b7d1"
+    },
+    "date": "2023-04-01T09:00:00.000Z",
+    "employeeId": {
+        "$oid": "65febcaa5f39a20c439ff0ea"
+    },
+    "deskOverlays": {
+        "polygons": [
+            {
+                "id": "polygon1",
+                "name": "Desk Area",
+                "points": [
+                    {
+                        "x": {
+                            "$numberDouble": "10.0"
+                        },
+                        "y": {
+                            "$numberDouble": "20.0"
+                        }
+                    },
+                    {
+                        "x": {
+                            "$numberDouble": "30.0"
+                        },
+                        "y": {
+                            "$numberDouble": "20.0"
+                        }
+                    },
+                    {
+                        "x": {
+                            "$numberDouble": "30.0"
+                        },
+                        "y": {
+                            "$numberDouble": "40.0"
+                        }
+                    },
+                    {
+                        "x": {
+                            "$numberDouble": "10.0"
+                        },
+                        "y": {
+                            "$numberDouble": "40.0"
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "polygon2",
+                "name": "Desk Area 2",
+                "points": [
+                    {
+                        "x": {
+                            "$numberInt": "20"
+                        },
+                        "y": {
+                            "$numberInt": "30"
+                        }
+                    },
+                    {
+                        "x": {
+                            "$numberInt": "40"
+                        },
+                        "y": {
+                            "$numberInt": "30"
+                        }
+                    },
+                    {
+                        "x": {
+                            "$numberInt": "40"
+                        },
+                        "y": {
+                            "$numberInt": "50"
+                        }
+                    },
+                    {
+                        "x": {
+                            "$numberInt": "20"
+                        },
+                        "y": {
+                            "$numberInt": "50"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}
