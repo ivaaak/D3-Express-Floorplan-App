@@ -162,6 +162,10 @@ div.tooltip {
   cursor: not-allowed;
 }
 
+.dp--menu-wrapper {
+  z-index: 100;
+}
+
 input {
   width: 100%;
   padding: 10px;

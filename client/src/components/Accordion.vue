@@ -4,11 +4,8 @@
             <h1> Reserve: </h1>
         </div>
         <div class="tab">
-            <input class="transparentInput" type="checkbox" name="accordion-1" id="cb1"> <!-- checked to default open-->
-            <label for="cb1" class="tab__label">Calendar</label>
-            <div class="tab__content">
-                <Calendar></Calendar>
-            </div>
+            <div v-if="date"> Date Picked: {{ formatDate(date) }}</div>
+            <VueDatePicker v-model="date" :format="format"></VueDatePicker>
         </div>
         <div class="tab">
             <input class="transparentInput" type="checkbox" name="accordion-2" id="cb2">
@@ -53,7 +50,6 @@
             <label for="cb7" class="tab__label">Upload Floorplan</label>
             <div class="tab__content">
                 <form action="upload" method="POST">
-                   
                     <p>
                         Drag your files here or click in this area.
                         <input id="uploadWindow" type="file" multiple>
@@ -64,6 +60,45 @@
         </div>
     </section>
 </template>
+
+<script>
+import AddEmployee from './AddEmployee.vue';
+import ManageDesks from './ManageDesks.vue';
+import HeaderMenu from './HeaderMenu.vue';
+import FloorplanHeader from './FloorplanHeader.vue';
+import ManageFloorplans from './ManageFloorplans.vue';
+import DeskPicker from './DeskPicker.vue';
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css'
+
+export default {
+    components: {
+        AddEmployee,
+        ManageDesks,
+        HeaderMenu,
+        FloorplanHeader,
+        ManageFloorplans,
+        DeskPicker,
+        VueDatePicker
+    },
+    data() {
+        return {
+            date: null,
+        };
+    },
+    methods: {
+        formatDate(date) {
+            const day = date.getDate();
+            const month = date.getMonth() + 1;
+            const year = date.getFullYear();
+
+            return `${day}/${month}/${year}`;
+        }
+    }
+}
+</script>
+
+
 
 <style>
 :root {
@@ -188,27 +223,4 @@ form p {
     width: 22%;
     height: 16%;
 }
-
 </style>
-
-<script>
-import AddEmployee from './AddEmployee.vue';
-import ManageDesks from './ManageDesks.vue';
-import Calendar from './Calendar.vue';
-import HeaderMenu from './HeaderMenu.vue';
-import FloorplanHeader from './FloorplanHeader.vue';
-import ManageFloorplans from './ManageFloorplans.vue';
-import DeskPicker from './DeskPicker.vue';
-
-export default {
-    components: {
-        AddEmployee,
-        ManageDesks,
-        Calendar,
-        HeaderMenu,
-        FloorplanHeader,
-        ManageFloorplans,
-        DeskPicker
-    }
-}
-</script>

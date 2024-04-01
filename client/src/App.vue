@@ -16,7 +16,6 @@
 
 <script>
 import ManageDesks from './components/ManageDesks.vue';
-import Calendar from './components/Calendar.vue';
 import HeaderMenu from './components/HeaderMenu.vue';
 import FloorplanHeader from './components/FloorplanHeader.vue';
 import Accordion from './components/Accordion.vue'
@@ -24,7 +23,6 @@ import Accordion from './components/Accordion.vue'
 export default {
   components: {
     ManageDesks,
-    Calendar,
     HeaderMenu,
     FloorplanHeader,
     Accordion
