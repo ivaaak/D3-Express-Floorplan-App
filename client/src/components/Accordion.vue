@@ -28,7 +28,7 @@
             <input class="transparentInput" type="checkbox" name="accordion-4" id="cb4"> <!-- checked to default open-->
             <label for="cb4" class="tab__label">Manage Employees</label>
             <div class="tab__content">
-                <AddEmployee></AddEmployee>
+                <ManageEmployees></ManageEmployees>
             </div>
         </div>
         <div class="tab">
@@ -62,7 +62,7 @@
 </template>
 
 <script>
-import AddEmployee from './AddEmployee.vue';
+import ManageEmployees from './ManageEmployees.vue';
 import ManageDesks from './ManageDesks.vue';
 import HeaderMenu from './HeaderMenu.vue';
 import FloorplanHeader from './FloorplanHeader.vue';
@@ -73,7 +73,7 @@ import '@vuepic/vue-datepicker/dist/main.css'
 
 export default {
     components: {
-        AddEmployee,
+        ManageEmployees,
         ManageDesks,
         HeaderMenu,
         FloorplanHeader,
@@ -124,7 +124,7 @@ export default {
 
 .tab-header {
     width: 25vw;
-    text-align: left;
+    text-align: center;
     background: var(--theme);
 
     h1 {

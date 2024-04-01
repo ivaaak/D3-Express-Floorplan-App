@@ -51,7 +51,7 @@ export default {
             };
 
             // Attach the handlePolygonClick function to the SVG click event
-            d3.select("#demo svg").on("click", handlePolygonClick);
+            d3.select("#floorplanSvgContainer svg").on("click", handlePolygonClick);
         }
     }
 }

@@ -105,7 +105,7 @@ export default {
       var startPointSelection = function () {
         var selectedPoints = [];
         var maxPoints = 4;
-        var svg = d3.select("#demo svg"); // Select the SVG
+        var svg = d3.select("#floorplanSvgContainer svg"); // Select the SVG
 
         // Function to draw a circle at a given point
         var drawCircle = function (point) {
@@ -127,7 +127,7 @@ export default {
             .attr("stroke-width", 2); // Width of the line
         };
 
-        d3.select("#demo svg").on("click", function () {
+        d3.select("#floorplanSvgContainer svg").on("click", function () {
           if (selectedPoints.length < maxPoints) {
             // Calculate the point's coordinates on the image
             var imagePointX = d3.event.pageX //- d3.event.offsetX;
@@ -159,7 +159,7 @@ export default {
 
       // Attach the startPointSelection function to the button click event
       //d3.select("#startSelection").on("click", startPointSelection);
-      d3.select("#demo svg").on("click", startPointSelection);
+      d3.select("#floorplanSvgContainer svg").on("click", startPointSelection);
     }
   },
   created() {
