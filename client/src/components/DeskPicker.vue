@@ -1,12 +1,15 @@
 <template>
     <div>
+        <div>Selected Date: Today</div>
         <div>Selected Desk: {{ selectedDesk.name }}</div>
         <div>With Coordinates: {{ selectedDesk.coordinates }}</div>
     </div>
 
-
-    <button id="pickDesk" class="wideButton" @click="pickDesk()">
-        Select A Desk To Reserve
+    <button  id="pickDesk" class="narrowButton" @click="pickDesk()">
+        {{ !selectionActive ? "Select A Desk To Reserve" : "Change Selected Desk" }}
+    </button>
+    <button  class="narrowButton" @click="reserveDesk()">
+        Confirm and Reserve
     </button>
 </template>
 
@@ -28,6 +31,7 @@ export default {
             var updateDesk = (name, coordinates) => { // Use an arrow function here
                 this.selectedDesk.name = name;
                 this.selectedDesk.coordinates = coordinates;
+                this.selectionActive = !this.selectionActive;
             }
             var handlePolygonClick = function () {
                 // Check if the clicked element is a polygon

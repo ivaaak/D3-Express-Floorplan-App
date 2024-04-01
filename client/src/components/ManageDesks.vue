@@ -6,11 +6,11 @@
     </button>
     <form @submit.prevent="submitForm">
       <input v-model="desk.name" placeholder="Desk Name" />
-      <button v-if="!isEditing && !selectionCompleted" @click="completeSelection" 
-        id="startSelection" class="wideButton">
+      <button v-if="!isEditing && !selectionCompleted"
+       @click="selectDeskCoordinates()" class="wideButton">
         Select 4 Points To Create A Desk
       </button>
-      <div v-if="!isEditing &&  selectionCompleted"> Points selected: {{ pointsSelected }}</div>
+      <div v-if="!isEditing && selectionCompleted"> Points selected: {{ pointsSelected }}</div>
       <button v-if="!isEditing" class="wideButton" v-bind:disabled="!selectionCompleted">
         Create Desk
       </button>
@@ -40,21 +40,12 @@ export default {
       },
       isEditing: false,
       selectionCompleted: false, // New property to track selection completion
-      pointsSelected: [
-        { "x": 1.2, "y": 11.0 },
-        { "x": 8.5, "y": 2.0 },
-        { "x": 32, "y": 2.0 },
-        { "x": 31.5, "y": 19.5 },
-        { "x": 1.2, "y": 20.5 }]
+      pointsSelected: []
     };
   },
   methods: {
     toggleEditMode() {
       this.isEditing = !this.isEditing;
-    },
-    completeSelection() {
-      this.selectionCompleted = true;
-
     },
     async fetchDesks() {
       try {
@@ -105,6 +96,71 @@ export default {
         this.createDesk();
       }
     },
+    selectDeskCoordinates() {
+      var completeSelection = (selectedPoints) => { // Use an arrow function here
+        this.selectionCompleted = true;
+        this.pointsSelected = selectedPoints
+      }
+      // Function to start point selection
+      var startPointSelection = function () {
+        var selectedPoints = [];
+        var maxPoints = 4;
+        var svg = d3.select("#demo svg"); // Select the SVG
+
+        // Function to draw a circle at a given point
+        var drawCircle = function (point) {
+          svg.append("circle")
+            .attr("cx", point[0])
+            .attr("cy", point[1])
+            .attr("r", 5) // Radius of the circle
+            .attr("fill", "red"); // Color of the circle
+        };
+
+        // Function to draw a line between two points
+        var drawLine = function (point1, point2) {
+          svg.append("line")
+            .attr("x1", point1[0])
+            .attr("y1", point1[1])
+            .attr("x2", point2[0])
+            .attr("y2", point2[1])
+            .attr("stroke", "red") // Color of the line
+            .attr("stroke-width", 2); // Width of the line
+        };
+
+        d3.select("#demo svg").on("click", function () {
+          if (selectedPoints.length < maxPoints) {
+            // Calculate the point's coordinates on the image
+            var imagePointX = d3.event.pageX //- d3.event.offsetX;
+
+            var imagePointY = d3.event.pageY //- d3.event.offsetY;
+            var point = [imagePointX, imagePointY];
+            selectedPoints.push(point);
+            console.log("Selected point on image:", point);
+
+            // Draw a red dot at the selected point
+            drawCircle(point);
+
+            // If there are at least two points, draw a line connecting the last two points
+            if (selectedPoints.length >= 2) {
+              var lastPoint = selectedPoints[selectedPoints.length - 1];
+              var secondLastPoint = selectedPoints[selectedPoints.length - 2];
+              drawLine(secondLastPoint, lastPoint);
+            }
+
+            if (selectedPoints.length === maxPoints) {
+              console.log("All points selected:", selectedPoints);
+              // Stop listening for clicks after 4 points have been selected
+              d3.select(this).on("click", null);
+              completeSelection(selectedPoints);
+            }
+          }
+        });
+      };
+
+      // Attach the startPointSelection function to the button click event
+      //d3.select("#startSelection").on("click", startPointSelection);
+      d3.select("#demo svg").on("click", startPointSelection);
+    }
   },
   created() {
     this.fetchDesks();
