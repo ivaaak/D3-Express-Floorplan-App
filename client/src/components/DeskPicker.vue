@@ -42,6 +42,17 @@ export default {
                 this.selectedDesk.coordinates = coordinates;
                 this.selectionActive = !this.selectionActive;
             }
+            var colorDeskByTitle = (deskTitle, color) => {
+                var pathElements = document.querySelectorAll('path');
+                pathElements.forEach(function (path) {
+                    // Check if the path has a title with the specified deskTitle
+                    var title = path.querySelector('title');
+                    if (title && title.textContent === deskTitle) {
+                        // Change the fill color of the path
+                        path.style.fill = color;
+                    }
+                });
+            }
             var normalizeCoordinates = (polygonValues) => { // leetcode 101
                 // Step 1: Split the string into an array of substrings on 'M' and 'L'
                 const coordinatesArray = polygonValues.split(/M|L/);
@@ -79,7 +90,9 @@ export default {
                     var normalizedPolygon = normalizeCoordinates(target.getAttribute("d"));
                     console.log("handlePolygonClick", normalizedPolygon);
                     if (titleElement) {
+                        colorDeskByTitle(titleElement.textContent, "#FF0000"); // color selected desk red
                         updateDesk(titleElement.textContent, normalizedPolygon);
+                        // add logic to deselect old desk
                     } else {
                         console.log("No title found for the clicked polygon.");
                     }
@@ -96,10 +109,6 @@ export default {
                 name: this.selectedDesk.name,
                 points: this.selectedDesk.coordinates,
             };
-            console.log("reserveDesk polygon.points", this.polygon.points);
-            console.log("reserveDesk this.selectedDesk.coordinates", this.selectedDesk.coordinates);
-
-            console.log("this.polygon.points ===== coordinates", this.polygon.points == this.selectedDesk.coordinates);
 
             try {
                 const response = await axios.post('/api/reservations/addPolygon', {
@@ -110,7 +119,8 @@ export default {
             } catch (error) {
                 console.error('Error adding polygon:', error);
             }
-        },
+            // remove event handler, refetch desks
+        }
     }
 }
 </script>

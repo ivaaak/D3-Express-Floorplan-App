@@ -190,3 +190,8 @@ input {
   height: 100px;
   background-color: var(--primary);
 }
+
+.polygon { /* desk color - default is blue */
+  fill: #227093; /* Change the color to red */
+  fill-opacity: 0.6;
+}
