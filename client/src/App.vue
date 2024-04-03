@@ -6,7 +6,7 @@
         <FloorplanHeader></FloorplanHeader>
         <div id="floorplanSvgContainer"></div> <!-- Main Floorplan Container Div -->
         <div id="tooltip" style="position: absolute; opacity: 0;"></div>
-
+        <button @click="this.toggleDesksEditable()"> Edit desks: </button>
       </div>
       <Accordion id="sidepanel">
       </Accordion>
@@ -31,7 +31,14 @@ export default {
   },
   data() {
     return {
+      mapdata: {},
+      map: undefined,
+      heatmap: undefined,
+      overlays: undefined,
+      imagelayer: undefined,
+      scaleFactor: 1.7, // change 1.7 to scale the image
       selectionActive: false,
+      deskObjectsEditable: true,
       floorImageUrl: 'https://static.dezeen.com/uploads/2019/05/synchroon-office-space-encounters-interiors-utrecht-netherlands_dezeen_floor-plan.jpg'
     };
   },
@@ -52,26 +59,20 @@ export default {
       });
     },
     loadTooltipOnPolygons() {
-      var div = d3.select("body").append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0);
-
-      // Hover tooltip on polygon layer
+      var div = d3.select("#tooltip").style("opacity", 1);
+      var deskID = div.attr("title");
+      var tooltipContent = '<div class="tooltip-content">DeskID: ' + deskID + '</div>';
+      // Select the polygon element and add event listeners for mouseover and mouseout
       d3.select('.polygon')
-        .on("mouseover", function (d) {
-          div.transition()
-            .duration(0)
-            .style("opacity", .9);
-          div.html("Price: <br>" + "<br/>Volume: ")
-            .style("left", (d3.event.pageX) + "px")
-            .style("top", (d3.event.pageY - 28) + "px");
-          console.log("event", (d3.event))
+        .on("mouseover", function (d) { // show
+          div.transition().duration(200).style("opacity", 1);
+            div.html(tooltipContent)
+              .style("left", (d3.event.pageX) + "px")
+              .style("top", (d3.event.pageY - 28) + "px");
         })
-        .on("mouseout", function (d) {
-          div.transition()
-            .duration(0)
-            .style("opacity", 0);
-        })
+        .on("mouseout", function (d) { // hide
+          div.transition().duration(500).style("opacity", 0);
+        });
     },
     addDebugD3ClickListener() {
       // Click event listener for debugging
@@ -82,53 +83,76 @@ export default {
           console.log("offset xpos:", (d3.event.offsetX), "  ypos:", (d3.event.offsetY));
           console.log("x:", (d3.event.x), "  y:", (d3.event.y));
         });
-    }
-  },
-  async mounted() {
-    // Load Image -> Load data -> Build D3 Floorplan map -> Add layers (overlay heatmap polygon)
-    const dimensions = await this.getImageDimensions(1.7); // change 1.7 to scale the image
+    },
+    toggleDesksEditable() {
+      this.deskObjectsEditable = !this.deskObjectsEditable;
+      // re-render floorplan with new layer editable setting
+      this.refreshD3FloorplanLayers();
+    },
+    async prepareD3FloorplanLayers() { // Main rendering function
+      // Load Image -> Load data -> Build D3 Floorplan map -> Add layers (overlay heatmap polygon)
+      const dimensions = await this.getImageDimensions(this.scaleFactor);
 
-    var xscale = d3.scale.linear().domain([0, 50]).range([0, dimensions.width]);
-    var yscale = d3.scale.linear().domain([0, 35]).range([0, dimensions.height]);
+      var xscale = d3.scale.linear().domain([0, 50]).range([0, dimensions.width]);
+      var yscale = d3.scale.linear().domain([0, 35]).range([0, dimensions.height]);
 
-    var map = d3.floorplan().xScale(xscale).yScale(yscale);
-    var imagelayer = d3.floorplan.imagelayer();
-    var heatmap = d3.floorplan.heatmap();
-    var overlays = d3.floorplan.overlays().editMode(false);
-    var mapdata = {};
-    //var vectorfield = d3.floorplan.vectorfield();
-    //var pathplot = d3.floorplan.pathplot();
+      this.map = d3.floorplan().xScale(xscale).yScale(yscale);
+      this.imagelayer = d3.floorplan.imagelayer();
+      this.heatmap = d3.floorplan.heatmap();
+      this.overlays = d3.floorplan.overlays().editMode(this.deskObjectsEditable);
+      // editMode True makes it so that the shapes are draggable and editable
+      //var vectorfield = d3.floorplan.vectorfield();
+      //var pathplot = d3.floorplan.pathplot();
 
-    mapdata[imagelayer.id()] = [{ url: this.floorImageUrl, x: 0, y: 0, height: 35, width: 50 }];
+      this.mapdata[this.imagelayer.id()] = [{ url: this.floorImageUrl, x: 0, y: 0, height: 35, width: 50 }];
 
-    // Function to generate the different layers
-    map.addLayer(imagelayer).addLayer(heatmap).addLayer(overlays);
-    //.addLayer(vectorfield).addLayer(pathplot)
+      // Function to generate the different layers
+      this.map.addLayer(this.imagelayer).addLayer(this.heatmap).addLayer(this.overlays);
+      //.addLayer(vectorfield).addLayer(pathplot)
 
-    var loadData = function (heatmapDataSource, polygonDataSource) {
-      mapdata[heatmap.id()] = heatmapDataSource.heatmap;
-      mapdata[overlays.id()] = polygonDataSource.overlays;
-      //mapdata[vectorfield.id()] = data.vectorfield;
-      //mapdata[pathplot.id()] = data.pathplot;
-    };
-    var loadHeatmapData = function (heatmapDataSource) {
-      mapdata[heatmap.id()] = heatmapDataSource.heatmap;
-    };
-    var loadPolygonData = function (polygonDataSource) {
-      mapdata[overlays.id()] = polygonDataSource.overlays;
-    };
-    var generateD3FloorplanMap = function() {
+      this.loadHeatmapData(heatmapData);
+      this.loadPolygonData(polygonData);
+      //this.loadData(heatmapData, polygonData);
+    },
+    async renderD3FloorplanLayers() {
+      const dimensions = await this.getImageDimensions(this.scaleFactor);
+
       d3.select("#floorplanSvgContainer").append("svg")
         .attr("height", dimensions.height).attr("width", dimensions.width)
-        .datum(mapdata).call(map);
-    }
-
-    loadHeatmapData(heatmapData);
-    loadPolygonData(polygonData);
-    //loadData(heatmapData, polygonData);
+        .datum(this.mapdata).call(this.map);
+    },
+    removeSVGCanvasElement() {
+      var svgElement = document.querySelector('svg');
+      if (svgElement) {
+        svgElement.parentNode.removeChild(svgElement);
+      } else {
+        console.log('No SVG element found');
+      }
+    },
+    async refreshD3FloorplanLayers() {
+      this.removeSVGCanvasElement();
+      this.prepareD3FloorplanLayers();
+      this.loadTooltipOnPolygons();
+      this.renderD3FloorplanLayers();
+    },
+    loadData(heatmapDataSource, polygonDataSource) {
+      this.mapdata[this.heatmap.id()] = heatmapDataSource.heatmap;
+      this.mapdata[this.overlays.id()] = polygonDataSource.overlays;
+      //this.mapdata[this.vectorfield.id()] = data.vectorfield;
+      //this.mapdata[this.pathplot.id()] = data.pathplot;
+    },
+    loadHeatmapData(heatmapDataSource) {
+      this.mapdata[this.heatmap.id()] = heatmapDataSource.heatmap;
+    },
+    loadPolygonData(polygonDataSource) {
+      this.mapdata[this.overlays.id()] = polygonDataSource.overlays;
+    },
+  },
+  async mounted() {
+    this.prepareD3FloorplanLayers();
     this.loadTooltipOnPolygons();
     //this.addDebugD3ClickListener();
-    generateD3FloorplanMap();
+    this.renderD3FloorplanLayers();
   }
 }
 </script>
