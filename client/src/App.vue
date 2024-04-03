@@ -3,12 +3,12 @@
     <HeaderMenu></HeaderMenu>
     <div class='parent'>
       <div id="floorplanContainer">
-        <FloorplanHeader></FloorplanHeader>
+        <FloorplanHeader :datePicked="datePicked"  v-bind="$attrs"></FloorplanHeader>
         <div id="floorplanSvgContainer"></div> <!-- Main Floorplan Container Div -->
         <div id="tooltip" style="position: absolute; opacity: 0;"></div>
         <button @click="this.toggleDesksEditable()"> Edit desks: </button>
       </div>
-      <Accordion id="sidepanel">
+      <Accordion id="sidepanel" @date-changed="handleDateChange">
       </Accordion>
     </div>
   </main>
@@ -19,7 +19,7 @@ import ManageDesks from './components/ManageDesks.vue';
 import HeaderMenu from './components/HeaderMenu.vue';
 import FloorplanHeader from './components/FloorplanHeader.vue';
 import Accordion from './components/Accordion.vue'
-import heatmapData from './data/heatmap.json';
+import heatmapData from './data/heatmapAreas.json';
 import polygonData from './data/polygons.json';
 
 export default {
@@ -39,6 +39,7 @@ export default {
       scaleFactor: 1.7, // change 1.7 to scale the image
       selectionActive: false,
       deskObjectsEditable: true,
+      datePicked: undefined,
       floorImageUrl: 'https://static.dezeen.com/uploads/2019/05/synchroon-office-space-encounters-interiors-utrecht-netherlands_dezeen_floor-plan.jpg'
     };
   },
@@ -66,9 +67,9 @@ export default {
       d3.select('.polygon')
         .on("mouseover", function (d) { // show
           div.transition().duration(200).style("opacity", 1);
-            div.html(tooltipContent)
-              .style("left", (d3.event.pageX) + "px")
-              .style("top", (d3.event.pageY - 28) + "px");
+          div.html(tooltipContent)
+            .style("left", (d3.event.pageX) + "px")
+            .style("top", (d3.event.pageY - 28) + "px");
         })
         .on("mouseout", function (d) { // hide
           div.transition().duration(500).style("opacity", 0);
@@ -99,7 +100,9 @@ export default {
       this.map = d3.floorplan().xScale(xscale).yScale(yscale);
       this.imagelayer = d3.floorplan.imagelayer();
       this.heatmap = d3.floorplan.heatmap();
+      this.heatmap.title("areas");
       this.overlays = d3.floorplan.overlays().editMode(this.deskObjectsEditable);
+      this.overlays.title("desks");
       // editMode True makes it so that the shapes are draggable and editable
       //var vectorfield = d3.floorplan.vectorfield();
       //var pathplot = d3.floorplan.pathplot();
@@ -125,8 +128,6 @@ export default {
       var svgElement = document.querySelector('svg');
       if (svgElement) {
         svgElement.parentNode.removeChild(svgElement);
-      } else {
-        console.log('No SVG element found');
       }
     },
     async refreshD3FloorplanLayers() {
@@ -147,6 +148,9 @@ export default {
     loadPolygonData(polygonDataSource) {
       this.mapdata[this.overlays.id()] = polygonDataSource.overlays;
     },
+    handleDateChange(newDate) {
+      this.datePicked = newDate;
+    }
   },
   async mounted() {
     this.prepareD3FloorplanLayers();

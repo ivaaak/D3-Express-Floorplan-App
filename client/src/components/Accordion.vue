@@ -4,8 +4,7 @@
             <h1> Reserve: </h1>
         </div>
         <div class="tab">
-            <div v-if="date"> Date Picked: {{ formatDate(date) }}</div>
-            <VueDatePicker v-model="date" :format="format"></VueDatePicker>
+            <VueDatePicker v-model="date"></VueDatePicker>
         </div>
         <div class="tab">
             <input class="transparentInput" type="checkbox" name="accordion-2" id="cb2">
@@ -16,9 +15,9 @@
         </div>
         <div class="tab">
             <input class="transparentInput" type="checkbox" name="accordion-3" id="cb3">
-            <label for="cb3" class="tab__label">Chat</label>
+            <label for="cb3" class="tab__label">Check Reservations</label>
             <div class="tab__content">
-                CHAT???
+                Reservations List Here:
             </div>
         </div>
         <div class="tab-header">
@@ -70,6 +69,7 @@ import ManageFloorplans from './ManageFloorplans.vue';
 import DeskPicker from './DeskPicker.vue';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
+import moment from 'moment';
 
 export default {
     components: {
@@ -83,16 +83,26 @@ export default {
     },
     data() {
         return {
-            date: null,
+            date: this.getTodaysDate(),
         };
     },
     methods: {
         formatDate(date) {
+            if (typeof date === 'string') {
+                date = new Date(date);
+            }
             const day = date.getDate();
-            const month = date.getMonth() + 1;
+            const month = date.getMonth() + 1; // Months are 0-based, so we add 1
             const year = date.getFullYear();
-
-            return `${day}/${month}/${year}`;
+            return `${day} / ${month} / ${year}`;
+        },
+        getTodaysDate() {
+            return moment().format('DD MM YYYY HH:mm');
+        }
+    },
+    watch: {
+        date(newDate) {
+            this.$emit('date-changed', newDate);
         }
     }
 }

@@ -1,7 +1,7 @@
 <template>
     <div class="projects-section-header">
         <p>Office: Blubito AG
-            <button @click="openDialog()"> ✎ </button>
+            <button v-if="this.canEditOfficeName" @click="openDialog()"> ✎ </button>
         </p>
         <p class="time">Todays Date: {{ currentTime }}</p>
     </div>
@@ -27,15 +27,17 @@
         <div class="projects-status">
             <div class="item-status">
                 <span class="status-type">Date Selected:</span>
-                <span class="status-number">Date clicked on calendar here</span>
+                <span class="status-number">{{ formatDate(datePicked) }}</span>
             </div>
         </div>
     </div>
+    <ModalDialog :show="showModal" :title="modalTitle" :message="modalMessage" @close="closeModal" />
 </template>
 
 <script>
 import ModalDialog from './ModalDialog.vue';
 import moment from 'moment';
+
 export default {
     components: {
         ModalDialog,
@@ -43,9 +45,17 @@ export default {
     data() {
         return {
             showModal: false,
+            canEditOfficeName: true,
+            currentDate: '',
             modalTitle: '',
             modalMessage: '',
         };
+    },
+    props: {
+        datePicked: {
+            type: Date,
+            required: false,
+        },
     },
     methods: {
         openDialog() {
@@ -56,11 +66,23 @@ export default {
         closeModal() {
             this.showModal = false;
         },
+        formatDate(date) {
+            if (date) {
+                const day = date.getDate();
+                const month = date.getMonth() + 1;
+                const year = date.getFullYear();
+                const hour = date.getHours();
+                const minute = date.getMinutes();
+                return `${day} / ${month} / ${year} ${hour}:${minute}`;
+            } else {
+                return this.currentDate;
+            }
+        }
     },
-
     computed: {
         currentTime() {
-            return moment().format('DD MM YYYY HH:mm');
+            this.currentDate = moment().format('DD / MM / YYYY HH:mm');
+            return this.currentDate;
         }
     }
 }
