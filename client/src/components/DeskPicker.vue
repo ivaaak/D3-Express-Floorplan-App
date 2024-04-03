@@ -25,7 +25,7 @@ export default {
                 name: "",
                 coordinates: {}
             },
-            // Example polygon data
+            prevDeskName: null,
             polygon: {
                 id: "",
                 name: "",
@@ -36,70 +36,64 @@ export default {
     methods: {
         pickDesk() {
             this.selectionActive = true;
-            // Function to handle polygon click
-            var updateDesk = (name, coordinates) => { // Use an arrow function here
+
+            var updateDesk = (name, coordinates) => {
                 this.selectedDesk.name = name;
                 this.selectedDesk.coordinates = coordinates;
                 this.selectionActive = !this.selectionActive;
             }
-            var colorDeskByTitle = (deskTitle, color) => {
+
+            function colorDeskByTitle(deskTitle, selectedColor, defaultColor) {
                 var pathElements = document.querySelectorAll('path');
-                pathElements.forEach(function (path) {
-                    // Check if the path has a title with the specified deskTitle
+
+                // First loop to find and update the previous desk's color
+                pathElements.forEach((path) => {
+                    var title = path.querySelector('title');
+                    if (title && title.textContent === this.prevDeskName) {
+                        path.style.fill = defaultColor; // Change the fill color of the previous desk
+                    }
+                });
+
+                // Second loop to set the current desk's color
+                pathElements.forEach((path) => {
                     var title = path.querySelector('title');
                     if (title && title.textContent === deskTitle) {
-                        // Change the fill color of the path
-                        path.style.fill = color;
+                        path.style.fill = selectedColor; // Set the selected desk color to red
+                        this.prevDeskName = deskTitle; // Update prevDeskName to the current desk's title
                     }
                 });
             }
-            var normalizeCoordinates = (polygonValues) => { // leetcode 101
-                // Step 1: Split the string into an array of substrings on 'M' and 'L'
+
+            function normalizeCoordinates(polygonValues) {
                 const coordinatesArray = polygonValues.split(/M|L/);
-
-                // Step 2: Handle the last coordinate pair
                 if (coordinatesArray[coordinatesArray.length - 1].endsWith('Z')) {
-                    // Remove the 'Z' character and process the last coordinate pair
-                    const lastCoordinate = coordinatesArray.pop().slice(0, -1); // Remove the 'Z' character
-                    coordinatesArray.push(lastCoordinate); // Add the processed last coordinate pair
+                    const lastCoordinate = coordinatesArray.pop().slice(0, -1);
+                    coordinatesArray.push(lastCoordinate);
                 }
-
-                // Step 3: Split each coordinate pair and convert to numbers
-                const normalizedCoordinates = coordinatesArray.map(coordinate => {
-                    // Trim leading and trailing whitespace
+                const normalizedCoordinates = coordinatesArray.map(function (coordinate) {
                     const trimmedCoordinate = coordinate.trim();
-                    const [x, y] = trimmedCoordinate.split(',').map(Number); // Convert to numbers
-                    return { x, y }; // Return as an object
+                    const [x, y] = trimmedCoordinate.split(',').map(Number);
+                    return { x, y };
                 });
-
-                // Step 4: Remove the first item from the array
                 normalizedCoordinates.shift();
-
-                console.log(normalizedCoordinates);
                 return normalizedCoordinates;
             }
-            var handlePolygonClick = function () {
-                // Check if the clicked element is a polygon
+
+            function handlePolygonClick() {
                 var target = d3.event.target;
                 var titleElement = target.querySelector('title');
-
                 if (target.tagName.toLowerCase() === 'path' && target.classList.contains('polygon')) {
-                    // Log the ID and values of the clicked polygon
-                    console.log("Clicked polygon target:", target);
-                    console.log("Clicked polygon values:",);
                     var normalizedPolygon = normalizeCoordinates(target.getAttribute("d"));
-                    console.log("handlePolygonClick", normalizedPolygon);
                     if (titleElement) {
-                        colorDeskByTitle(titleElement.textContent, "#FF0000"); // color selected desk red
-                        updateDesk(titleElement.textContent, normalizedPolygon);
-                        // add logic to deselect old desk
+                        // Ensure colorDeskByTitle is called with the correct context
+                        colorDeskByTitle.call(this, titleElement.textContent, "#FF0000", "#227093");
+                        updateDesk.call(this, titleElement.textContent, normalizedPolygon);
                     } else {
                         console.log("No title found for the clicked polygon.");
                     }
                 }
-            };
+            }
 
-            // Attach the handlePolygonClick function to the SVG click event
             d3.select("#floorplanSvgContainer svg").on("click", handlePolygonClick);
         },
         async reserveDesk() {
@@ -115,11 +109,10 @@ export default {
                     selectedDate: this.selectedDate,
                     polygon: this.polygon,
                 });
-                console.log('Polygon added successfully:', response.data);
+                console.log('Polygon added successfully:', response.data); // only save array of desk names?
             } catch (error) {
                 console.error('Error adding polygon:', error);
             }
-            // remove event handler, refetch desks
         }
     }
 }
