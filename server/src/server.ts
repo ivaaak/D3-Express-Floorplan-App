@@ -3,7 +3,7 @@ import express from "express";
 import routes from "./services/routes";
 import cors from "cors";
 import { connectToDatabase } from "./database";
-import { migrateFloorplanData } from './database'; // Import the migration function
+//import { migrateFloorplanData } from './database'; // Import the migration function
 
 // Load environment variables from the .env file, where the ATLAS_URI is configured
 dotenv.config();

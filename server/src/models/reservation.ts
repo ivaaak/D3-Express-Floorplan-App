@@ -1,36 +1,13 @@
 import * as mongodb from "mongodb";
-import { Overlays, Polygon } from "./floorplan";
 
 // Reservation Model
 export interface Reservation {
     _id?: mongodb.ObjectId;
-    deskId: mongodb.ObjectId;
-    date: string; // works on a day basis
+    deskId?: mongodb.ObjectId;
+    date?: string; // works on a day basis
+    officeId?: mongodb.ObjectId;
     employeeId?: mongodb.ObjectId;
-    deskOverlays?: Overlays; // polygons which correspond to desk coords
-}
-
-export function generateReservationObject(deskId: string, date: string, employeeId: string, polygon: Polygon) {
-    const { ObjectId } = require('mongodb');
-
-    const reservation = {
-        _id: new ObjectId(),
-        deskId: new ObjectId(deskId),
-        date: date,
-        employeeId: new ObjectId(employeeId),
-        deskOverlays: {
-            polygons: [
-                {
-                    id: polygon.id,
-                    name: polygon.name,
-                    points: [
-                        polygon.points
-                    ]
-                }
-            ]
-        }
-    };
-    return reservation;
+    deskIds?: string[];
 }
 
 
@@ -46,47 +23,12 @@ export function generateReservationObject(deskId: string, date: string, employee
     "employeeId": {
         "$oid": "65febcaa5f39a20c439ff0ea"
     },
-    "deskOverlays": {
-        "polygons": [
-            {
-                "id": "polygon1",
-                "name": "Desk Area",
-                "points": [
-                    {
-                        "x": {
-                            "$numberDouble": "10.0"
-                        },
-                        "y": {
-                            "$numberDouble": "20.0"
-                        }
-                    },
-                    {
-                        "x": {
-                            "$numberDouble": "30.0"
-                        },
-                        "y": {
-                            "$numberDouble": "20.0"
-                        }
-                    },
-                    {
-                        "x": {
-                            "$numberDouble": "30.0"
-                        },
-                        "y": {
-                            "$numberDouble": "40.0"
-                        }
-                    },
-                    {
-                        "x": {
-                            "$numberDouble": "10.0"
-                        },
-                        "y": {
-                            "$numberDouble": "40.0"
-                        }
-                    }
-                ]
-            }
-        ]
-    }
+    "officeId": {
+        "$oid": "65febcaa5f39a20c439ff0eb"
+    },
+    "deskIds": [
+        "1", "2"
+    ]
+    
 }
 */

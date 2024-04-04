@@ -1,29 +1,27 @@
 export const officeJsonSchema = {
     $jsonSchema: {
         bsonType: "object",
-        required: ["name", "imageUrls", "chosenFloorplan"],
         additionalProperties: false,
         properties: {
-            _id: {},
+            _id: {
+                bsonType: "objectId",
+                description: "'_id' is an optional ObjectId",
+            },
             name: {
                 bsonType: "string",
-                description: "'name' is required and is a string",
+                description: "'name' is optional and is a string",
             },
             imageUrls: {
                 bsonType: "array",
-                description: "'imageUrls' is required and is an array of strings",
+                description: "'imageUrls' is optional and is an array of strings",
                 items: {
                     bsonType: "string",
                 },
             },
             chosenFloorplan: {
                 bsonType: "string",
-                description: "'chosenFloorplan' is required and is a string",
-            },
-            desks: {
-                bsonType: "array",
-                description: "'desks' is an array of Desk objects",
-            },
+                description: "'chosenFloorplan' is optional and is a string",
+            }
         },
     },
 };

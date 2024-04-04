@@ -1,22 +1,20 @@
 import * as mongodb from "mongodb";
 import * as fs from 'fs';
-import { Employee } from "./models/employee";
-import { Office } from "./models/office";
-import { Desk } from "./models/desk";
-import { Reservation } from "./models/reservation";
-import { Floorplan } from "./models/floorplan";
 import { employeeJsonSchema } from "./dbSchemaValidations/employeeSchema";
 import { officeJsonSchema } from "./dbSchemaValidations/officeSchema";
 import { deskJsonSchema } from "./dbSchemaValidations/deskSchema";
 import { reservationJsonSchema } from "./dbSchemaValidations/reservationSchema";
-import { floorplanJsonSchema } from "./dbSchemaValidations/floorplanSchema";
+import { Employee } from "./models/employee";
+import { Office } from "./models/office";
+import { Desk } from "./models/desk";
+import { Reservation } from "./models/reservation";
 
 export const collections: {
     employees?: mongodb.Collection<Employee>;
     offices?: mongodb.Collection<Office>;
     desks?: mongodb.Collection<Desk>;
     reservations?: mongodb.Collection<Reservation>;
-    floorplans?: mongodb.Collection<Floorplan>; // Add Floorplan to collections
+    //floorplans?: mongodb.Collection<Floorplan>;
 } = {};
 
 
@@ -39,8 +37,8 @@ export async function connectToDatabase(uri: string) {
     const reservationsCollection = db.collection<Reservation>("reservations");
     collections.reservations = reservationsCollection;
 
-    const floorplansCollection = db.collection<Floorplan>("floorplans");
-    collections.floorplans = floorplansCollection;
+    // const floorplansCollection = db.collection<Floorplan>("floorplans");
+    // collections.floorplans = floorplansCollection;
 }
 
 
@@ -88,17 +86,17 @@ async function applySchemaValidation(db: mongodb.Db) {
     });
 
 
-    await db.command({
-        collMod: "floorplans",
-        //validator: floorplanJsonSchema
-    }).catch(async (error: mongodb.MongoServerError) => {
-        if (error.codeName === "NamespaceNotFound") {
-            await db.createCollection("floorplans"); //, { validator: floorplanJsonSchema });
-        }
-    });
+    // await db.command({
+    //     collMod: "floorplans",
+    //     //validator: floorplanJsonSchema
+    // }).catch(async (error: mongodb.MongoServerError) => {
+    //     if (error.codeName === "NamespaceNotFound") {
+    //         await db.createCollection("floorplans"); //, { validator: floorplanJsonSchema });
+    //     }
+    // });
 }
 
-
+/*
 export async function migrateFloorplanData() {
     try {
         // Read the JSON file
@@ -126,5 +124,4 @@ export async function migrateFloorplanData() {
         console.error('Error migrating floorplan data:', error);
     }
 }
-
-
+*/
