@@ -6,7 +6,7 @@
         <FloorplanHeader :desksCount="desks" :datePicked="datePicked" v-bind="$attrs"></FloorplanHeader>
         <div id="floorplanSvgContainer"></div> <!-- Main Floorplan Container Div -->
         <div id="tooltip" style="position: absolute; opacity: 0;"></div>
-        <button @click="this.toggleDesksEditable()"> Edit desks: </button>
+        <button v-if="canEditDesks" @click="this.toggleDesksEditable()"> Edit desks: </button>
       </div>
       <Accordion id="sidepanel" @date-changed="handleDateChange">
       </Accordion>
@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import ManageDesks from './components/ManageDesks.vue';
 import HeaderMenu from './components/HeaderMenu.vue';
 import FloorplanHeader from './components/FloorplanHeader.vue';
 import Accordion from './components/Accordion.vue'
@@ -25,7 +24,6 @@ import axios from 'axios';
 
 export default {
   components: {
-    ManageDesks,
     HeaderMenu,
     FloorplanHeader,
     Accordion
@@ -42,7 +40,8 @@ export default {
       imagelayer: undefined,
       scaleFactor: 1.7, // change 1.7 to scale the image
       selectionActive: false,
-      deskObjectsEditable: true,
+      deskObjectsEditable: false,
+      canEditDesks: true,
       datePicked: undefined,
       floorImageUrl: undefined
     };

@@ -7,6 +7,7 @@ const officeService = express.Router();
 
 // GET /api/offices/
 officeService.get('/', async (req, res) => {
+    console.log("officeService / GET /api/offices/ called");
     try {
         const offices = await collections.offices?.find().toArray();
         res.json(offices);
@@ -18,6 +19,7 @@ officeService.get('/', async (req, res) => {
 
 // GET /api/offices/id
 officeService.get('/:id', async (req, res) => {
+    console.log("officeService / GET /api/offices/:id called");
     const { id } = req.params;
     try {
         const office = await collections.offices?.findOne({ _id: new mongodb.ObjectId(id) });
@@ -34,6 +36,7 @@ officeService.get('/:id', async (req, res) => {
 
 // POST /api/offices/
 officeService.post('/', async (req, res) => {
+    console.log("officeService / POST /api/offices/ called");
     const newOffice: Office = req.body;
     try {
         const result = await collections.offices?.insertOne(newOffice);
@@ -50,6 +53,7 @@ officeService.post('/', async (req, res) => {
 
 // PUT /api/offices/id
 officeService.put('/:id', async (req, res) => {
+    console.log("officeService / PUT /api/offices/:id called");
     const { id } = req.params;
     const updatedOffice: Office = req.body;
     try {
@@ -67,6 +71,7 @@ officeService.put('/:id', async (req, res) => {
 
 // DELETE /api/offices/id
 officeService.delete('/:id', async (req, res) => {
+    console.log("officeService / DELETE /api/offices/:id called");
     const { id } = req.params;
     try {
         const result = await collections.offices?.deleteOne({ _id: new mongodb.ObjectId(id) });
@@ -81,16 +86,15 @@ officeService.delete('/:id', async (req, res) => {
     }
 });
 
-
 // POST /api/desks/update-overlays
 officeService.post('/update-overlays', async (req, res) => {
+    console.log("officeService / POST /api/desks/update-overlays called");
     try {
-        const polygons = req.body; // Assuming the request body contains the array of polygon objects
+        const polygons = req.body;
 
-        // Update all desks with the new overlays
         const result = await collections.offices?.updateMany(
-            {}, // Match all documents
-            { $set: { overlays: polygons } } // Set the overlays field to the new array
+            {},
+            { $set: { overlays: polygons } }
         );
 
         if (result && result.matchedCount > 0) {
@@ -107,13 +111,13 @@ officeService.post('/update-overlays', async (req, res) => {
 
 // POST /api/desks/update-areas
 officeService.post('/update-areas', async (req, res) => {
+    console.log("officeService / POST /api/desks/update-areas called");
     try {
-        const heatmap = req.body; // Assuming the request body contains the heatmap object
+        const heatmap = req.body;
 
-        // Update all desks with the new areas
         const result = await collections.offices?.updateMany(
-            {}, // Match all documents
-            { $set: { areas: heatmap } } // Set the areas field to the new heatmap object
+            {},
+            { $set: { areas: heatmap } }
         );
 
         if (result && result.matchedCount > 0) {
@@ -127,7 +131,6 @@ officeService.post('/update-areas', async (req, res) => {
         res.status(500).send({ message: "Error updating areas", error: err.message });
     }
 });
-
 
 // Export the router
 export default officeService;

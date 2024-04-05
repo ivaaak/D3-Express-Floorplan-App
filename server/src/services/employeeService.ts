@@ -6,6 +6,7 @@ const employeeService = express.Router();
 
 // GET /api/employee/
 employeeService.get('/', async (req, res) => {
+    console.log("employeeService / GET /api/employee/ called");
     try {
         const employees = await collections.employees?.find().toArray();
         if (employees) {
@@ -20,6 +21,7 @@ employeeService.get('/', async (req, res) => {
 
 // POST /api/employee/
 employeeService.post('/', async (req, res) => {
+    console.log("employeeService / POST /api/employee/ called");
     try {
         const newEmployee = req.body;
         const result = await collections.employees?.insertOne(newEmployee);
@@ -35,6 +37,7 @@ employeeService.post('/', async (req, res) => {
 
 // PUT /api/employee/id
 employeeService.put('/:id', async (req, res) => {
+    console.log("employeeService / PUT /api/employee/:id called");
     try {
         const updatedEmployee = req.body;
         const id = new ObjectId(req.params.id);
@@ -51,6 +54,7 @@ employeeService.put('/:id', async (req, res) => {
 
 // DELETE /api/employee/id
 employeeService.delete('/:id', async (req, res) => {
+    console.log("employeeService / DELETE /api/employee/:id called");
     try {
         const id = new ObjectId(req.params.id);
         const result = await collections.employees?.deleteOne({ _id: id });

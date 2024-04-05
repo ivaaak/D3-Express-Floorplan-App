@@ -5,7 +5,7 @@
       {{ isEditing ? '✎ Switch to Create Mode ✎' : '✎ Switch to Edit Mode ✎' }}
     </button>
     <form @submit.prevent="submitForm">
-      <input v-model="desk.name" placeholder="Desk Name" />
+      <input v-model="desk.name" placeholder="Office Name" />
       <button v-if="!isEditing && !selectionCompleted"
        @click="selectDeskCoordinates()" class="wideButton">
         Select 4 Points To Create A Desk

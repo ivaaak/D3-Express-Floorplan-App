@@ -21,7 +21,7 @@ export default {
     return {
       items: [
         { id: 1, name: 'Manage Users', message: 'Manage Users clicked' },
-        { id: 2, name: 'Manage Desks', message: 'Manage Desks clicked' },
+        { id: 2, name: 'Manage Offices', message: 'Manage Offices clicked' },
         { id: 3, name: 'Floorplan', message: 'Floorplan clicked' },
         { id: 4, name: 'Search', message: 'Search clicked' },
         { id: 5, name: 'Login', message: 'Login clicked' },

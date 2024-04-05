@@ -32,9 +32,9 @@
         </div>
         <div class="tab">
             <input class="transparentInput" type="checkbox" name="accordion-5" id="cb5">
-            <label for="cb5" class="tab__label">Manage Desks</label>
+            <label for="cb5" class="tab__label">Manage Offices</label>
             <div class="tab__content">
-                <ManageDesks></ManageDesks>
+                <ManageOffices></ManageOffices>
             </div>
         </div>
         <div class="tab">
@@ -62,7 +62,7 @@
 
 <script>
 import ManageEmployees from './ManageEmployees.vue';
-import ManageDesks from './ManageDesks.vue';
+import ManageOffices from './ManageOffices.vue';
 import HeaderMenu from './HeaderMenu.vue';
 import FloorplanHeader from './FloorplanHeader.vue';
 import ManageFloorplans from './ManageFloorplans.vue';
@@ -75,7 +75,7 @@ import moment from 'moment';
 export default {
     components: {
         ManageEmployees,
-        ManageDesks,
+        ManageOffices,
         HeaderMenu,
         FloorplanHeader,
         ManageFloorplans,
