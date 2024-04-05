@@ -4,7 +4,7 @@ import { ObjectId } from 'mongodb';
 
 const employeeService = express.Router();
 
-// Read all employees
+// GET /api/employee/
 employeeService.get('/', async (req, res) => {
     try {
         const employees = await collections.employees?.find().toArray();
@@ -18,7 +18,7 @@ employeeService.get('/', async (req, res) => {
     }
 });
 
-// Create a new employee
+// POST /api/employee/
 employeeService.post('/', async (req, res) => {
     try {
         const newEmployee = req.body;
@@ -33,7 +33,7 @@ employeeService.post('/', async (req, res) => {
     }
 });
 
-// Update an employee by ID
+// PUT /api/employee/id
 employeeService.put('/:id', async (req, res) => {
     try {
         const updatedEmployee = req.body;
@@ -49,7 +49,7 @@ employeeService.put('/:id', async (req, res) => {
     }
 });
 
-// Delete an employee by ID
+// DELETE /api/employee/id
 employeeService.delete('/:id', async (req, res) => {
     try {
         const id = new ObjectId(req.params.id);
