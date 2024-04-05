@@ -17,7 +17,7 @@
             <input class="transparentInput" type="checkbox" name="accordion-3" id="cb3">
             <label for="cb3" class="tab__label">Check Reservations</label>
             <div class="tab__content">
-                Reservations List Here:
+                <Reservations :datePicked="datePicked" v-bind="$attrs"></Reservations>
             </div>
         </div>
         <div class="tab-header">
@@ -67,6 +67,7 @@ import HeaderMenu from './HeaderMenu.vue';
 import FloorplanHeader from './FloorplanHeader.vue';
 import ManageFloorplans from './ManageFloorplans.vue';
 import DeskPicker from './DeskPicker.vue';
+import Reservations from './Reservations.vue';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 import moment from 'moment';
@@ -79,7 +80,8 @@ export default {
         FloorplanHeader,
         ManageFloorplans,
         DeskPicker,
-        VueDatePicker
+        VueDatePicker,
+        Reservations
     },
     data() {
         return {
@@ -156,7 +158,7 @@ export default {
 }
 
 .tab .transparentInput:checked~.tab__content {
-    max-height: 25rem;
+    max-height: 40rem;
 }
 
 /* Visual styles */

@@ -36,20 +36,13 @@ reservationService.get('/:date', async (req, res) => {
         const { date } = req.params;
         // Parse the date string into a Date object
         const dateObject = new Date(date);
-        // Start and end of the day for the given date
-        const startOfDay = new Date(dateObject.setHours(0, 0, 0, 0));
-        const endOfDay = new Date(dateObject.setHours(23, 59, 59, 999));
 
-        // Ensure the dates are in a format that MongoDB can understand
-        const startOfDayISO = startOfDay.toISOString();
-        const endOfDayISO = endOfDay.toISOString();
+        // Format the date to a string that MongoDB can understand for comparison
+        const formattedDate = dateObject.toISOString().split('T')[0]; // This will give us the date in YYYY-MM-DD format
 
-        // Find reservations within the day
+        // Find reservations for the exact date
         const reservations = await collections.reservations?.find({
-            date: {
-                $gte: startOfDayISO,
-                $lte: endOfDayISO
-            }
+            date: formattedDate
         }).toArray();
 
         if (!reservations || reservations.length === 0) {
@@ -61,6 +54,7 @@ reservationService.get('/:date', async (req, res) => {
         res.status(500).json({ message: "Error fetching reservations by date" });
     }
 });
+
 
 
 // PUT /api/reservations/:id

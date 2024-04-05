@@ -96,11 +96,15 @@ export default {
         }
     },
     async mounted() {
-        await this.fetchReservations(this.datePicked);
+        if(!this.datePicked) {
+            await this.fetchReservations(this.currentDate);
+        } else {
+            await this.fetchReservations(this.datePicked);
+        }
     },
     computed: {
         currentTime() {
-            this.currentDate = moment().format('DD / MM / YYYY HH:mm');
+            this.currentDate = moment().format('YYYY-MM-DD');
             return this.currentDate;
         }
     }
