@@ -42,85 +42,15 @@
      };
   },
   methods: {
-     async fetchFloorplans() {
+     async fetchFloorplans() { //TODO endpoint
        try {
-         const response = await axios.get('/api/floorplan');
+         const response = await axios.get('/api/offices/floorplanImg');
          console.log("response.data", response.data)
 
          this.floorplans = response.data[0];
          console.log("this.floorplans", this.floorplans)
        } catch (error) {
          console.error('Error fetching floorplans:', error);
-       }
-     },
-     async fetchHeatmap() {
-       try {
-         const response = await axios.get('/api/heatmap');
-         this.heatmap = response.data;
-       } catch (error) {
-         console.error('Error fetching heatmap:', error);
-       }
-     },
-     async addHeatmapPoint() {
-       const newPoint = { x: 10, y: 20 }; // Example point
-       try {
-         const response = await axios.post('/api/heatmap', newPoint);
-         console.log('Added point:', response.data);
-       } catch (error) {
-         console.error('Error adding point to heatmap:', error);
-       }
-     },
-     async updateHeatmapPoint() {
-       const updatedPoint = { x: 30, y: 40 }; // Example updated point
-       try {
-         const response = await axios.put(`/api/heatmap/${updatedPoint.x}`, updatedPoint);
-         console.log('Updated point:', response.data);
-       } catch (error) {
-         console.error('Error updating point in heatmap:', error);
-       }
-     },
-     async deleteHeatmapPoint() {
-       const pointId = 10; // Example point ID
-       try {
-         await axios.delete(`/api/heatmap/${pointId}`);
-         console.log('Deleted point with ID:', pointId);
-       } catch (error) {
-         console.error('Error deleting point from heatmap:', error);
-       }
-     },
-     async fetchOverlays() {
-       try {
-         const response = await axios.get('/api/overlays');
-         this.overlays = response.data;
-       } catch (error) {
-         console.error('Error fetching overlays:', error);
-       }
-     },
-     async addOverlay() {
-       const newPolygon = { id: 'polygon1', points: [{ x: 10, y: 20 }, { x: 30, y: 40 }] }; // Example polygon
-       try {
-         const response = await axios.post('/api/overlays', newPolygon);
-         console.log('Added overlay:', response.data);
-       } catch (error) {
-         console.error('Error adding overlay:', error);
-       }
-     },
-     async updateOverlay() {
-       const updatedPolygon = { id: 'polygon1', points: [{ x: 50, y: 60 }, { x: 70, y: 80 }] }; // Example updated polygon
-       try {
-         const response = await axios.put(`/api/overlays/${updatedPolygon.id}`, updatedPolygon);
-         console.log('Updated overlay:', response.data);
-       } catch (error) {
-         console.error('Error updating overlay:', error);
-       }
-     },
-     async deleteOverlay() {
-       const overlayId = 'polygon1'; // Example overlay ID
-       try {
-         await axios.delete(`/api/overlays/${overlayId}`);
-         console.log('Deleted overlay with ID:', overlayId);
-       } catch (error) {
-         console.error('Error deleting overlay:', error);
        }
      },
   },

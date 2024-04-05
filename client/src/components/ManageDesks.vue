@@ -49,7 +49,7 @@ export default {
     },
     async fetchDesks() {
       try {
-        const response = await axios.get('/api/desks');
+        const response = await axios.get('/api/offices'); //TODO
         this.desks = response.data;
       } catch (error) {
         console.error('Error fetching desks:', error);
@@ -57,7 +57,7 @@ export default {
     },
     async createDesk() {
       try {
-        const response = await axios.post('/api/desks', this.desk);
+        const response = await axios.post('/api/offices/update-overlays', this.desk);
         this.desks.push(response.data);
         this.desk.name = '';
       } catch (error) {
@@ -66,7 +66,7 @@ export default {
     },
     async updateDesk(id) {
       try {
-        const response = await axios.put(`/api/desks/${id}`, this.desk);
+        const response = await axios.put(`/api/offices/update-overlays`, this.desk);
         const index = this.desks.findIndex(desk => desk._id === id);
         if (index !== -1) {
           this.desks[index] = response.data;
@@ -77,10 +77,10 @@ export default {
         console.error('Error updating desk:', error);
       }
     },
-    async deleteDesk(id) {
+    async deleteDesk(deskId) { //TODO Endpoint
       try {
-        await axios.delete(`/api/desks/${id}`);
-        this.desks = this.desks.filter(desk => desk._id !== id);
+        await axios.delete(`/api/offices/desk/${deskId}`);
+        this.desks = this.desks.filter(desk => desk._id !== deskId);
       } catch (error) {
         console.error('Error deleting desk:', error);
       }

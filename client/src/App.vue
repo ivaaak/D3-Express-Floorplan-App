@@ -3,7 +3,7 @@
     <HeaderMenu></HeaderMenu>
     <div class='parent'>
       <div id="floorplanContainer">
-        <FloorplanHeader :datePicked="datePicked"  v-bind="$attrs"></FloorplanHeader>
+        <FloorplanHeader :desksCount="desks" :datePicked="datePicked" v-bind="$attrs"></FloorplanHeader>
         <div id="floorplanSvgContainer"></div> <!-- Main Floorplan Container Div -->
         <div id="tooltip" style="position: absolute; opacity: 0;"></div>
         <button @click="this.toggleDesksEditable()"> Edit desks: </button>
@@ -19,8 +19,9 @@ import ManageDesks from './components/ManageDesks.vue';
 import HeaderMenu from './components/HeaderMenu.vue';
 import FloorplanHeader from './components/FloorplanHeader.vue';
 import Accordion from './components/Accordion.vue'
-import heatmapData from './data/heatmapAreas.json';
-import polygonData from './data/polygons.json';
+// import heatmapData from './data/heatmapAreas.json';
+// import polygonData from './data/polygons.json';
+import axios from 'axios';
 
 export default {
   components: {
@@ -32,6 +33,9 @@ export default {
   data() {
     return {
       mapdata: {},
+      office: undefined,
+      desks: undefined,
+      areas: undefined,
       map: undefined,
       heatmap: undefined,
       overlays: undefined,
@@ -40,10 +44,21 @@ export default {
       selectionActive: false,
       deskObjectsEditable: true,
       datePicked: undefined,
-      floorImageUrl: 'https://static.dezeen.com/uploads/2019/05/synchroon-office-space-encounters-interiors-utrecht-netherlands_dezeen_floor-plan.jpg'
+      floorImageUrl: undefined
     };
   },
   methods: {
+    async fetchOfficeDetails() {
+      try {
+        const response = await axios.get(`/api/offices/`);
+        this.office = response.data.find(office => office.name === "Blubito AG");
+        this.desks = this.office.coordinates;
+        console.log("desks", this.desks)
+        this.floorImageUrl = this.office.chosenFloorplan;
+      } catch (error) {
+        console.error('Error fetching office details:', error);
+      }
+    },
     getImageDimensions(scaleFactor) {
       return new Promise((resolve, reject) => {
         var img = new Image();
@@ -113,8 +128,8 @@ export default {
       this.map.addLayer(this.imagelayer).addLayer(this.heatmap).addLayer(this.overlays);
       //.addLayer(vectorfield).addLayer(pathplot)
 
-      this.loadHeatmapData(heatmapData);
-      this.loadPolygonData(polygonData);
+      this.loadHeatmapData(this.office);
+      this.loadPolygonData(this.desks);
       //this.loadData(heatmapData, polygonData);
     },
     async renderD3FloorplanLayers() {
@@ -137,22 +152,24 @@ export default {
       this.renderD3FloorplanLayers();
     },
     loadData(heatmapDataSource, polygonDataSource) {
-      this.mapdata[this.heatmap.id()] = heatmapDataSource.heatmap;
-      this.mapdata[this.overlays.id()] = polygonDataSource.overlays;
+      this.mapdata[this.heatmap.id()] = heatmapDataSource;
+      this.mapdata[this.overlays.id()] = polygonDataSource;
       //this.mapdata[this.vectorfield.id()] = data.vectorfield;
       //this.mapdata[this.pathplot.id()] = data.pathplot;
     },
     loadHeatmapData(heatmapDataSource) {
-      this.mapdata[this.heatmap.id()] = heatmapDataSource.heatmap;
+      console.log("heatmapDataSource", heatmapDataSource)
+      this.mapdata[this.heatmap.id()] = heatmapDataSource;
     },
     loadPolygonData(polygonDataSource) {
-      this.mapdata[this.overlays.id()] = polygonDataSource.overlays;
+      this.mapdata[this.overlays.id()] = polygonDataSource;
     },
     handleDateChange(newDate) {
       this.datePicked = newDate;
     }
   },
   async mounted() {
+    await this.fetchOfficeDetails();
     this.prepareD3FloorplanLayers();
     this.loadTooltipOnPolygons();
     //this.addDebugD3ClickListener();

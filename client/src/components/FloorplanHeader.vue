@@ -17,7 +17,7 @@
             </div>
             <div class="item-status">
                 <span class="status-type">Total Desks</span>
-                <span class="status-number">32</span>
+                <span class="status-number" v-if="desksCount">{{ desksCount.polygons.length }}</span>
             </div>
             <div class="item-status">
                 <span class="status-type">Calendar Chosen Date:</span>
@@ -37,6 +37,7 @@
 <script>
 import ModalDialog from './ModalDialog.vue';
 import moment from 'moment';
+import axios from 'axios';
 
 export default {
     components: {
@@ -49,6 +50,7 @@ export default {
             currentDate: '',
             modalTitle: '',
             modalMessage: '',
+            reservation: undefined,
         };
     },
     props: {
@@ -56,12 +58,26 @@ export default {
             type: Date,
             required: false,
         },
+        desksCount: {
+            type: Object,
+            required: false,
+        },
     },
     methods: {
+        async fetchReservations(datePicked) {
+            try {
+                const response = await axios.get(`/api/reservations/${datePicked}`);
+                this.reservation = response.data;
+                console.log("reservations", this.reservation)
+            } catch (error) {
+                console.error('Error fetching office details:', error);
+            }
+        },
         openDialog() {
             this.modalTitle = 'Dialog';
             this.modalMessage = "Edit the office:";
             this.showModal = true;
+            console.log("desksCount", this.desksCount)
         },
         closeModal() {
             this.showModal = false;
@@ -78,6 +94,9 @@ export default {
                 return this.currentDate;
             }
         }
+    },
+    async mounted() {
+        await this.fetchReservations(this.datePicked);
     },
     computed: {
         currentTime() {

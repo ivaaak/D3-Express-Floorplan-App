@@ -105,7 +105,7 @@ export default {
             };
 
             try {
-                const response = await axios.post('/api/reservations/addPolygon', {
+                const response = await axios.post('/api/reservations/addPolygon', { //TODO
                     selectedDate: this.selectedDate,
                     polygon: this.polygon,
                 });
