@@ -1,12 +1,14 @@
 <template>
     <div>
-        <div>Selected Date: Today</div>
         <div>Selected Desk: {{ selectedDesk.name }}</div>
         <div>With Coordinates: {{ selectedDesk.coordinates }}</div>
     </div>
 
-    <button id="pickDesk" class="narrowButton" @click="pickDesk()">
-        {{ !selectionActive ? "Select A Desk To Reserve" : "Change Selected Desk" }}
+    <button id="pickDesk" class="narrowButton" v-if="!selectionActive" @click="pickDesk()">
+        Select A Desk To Reserve
+    </button>
+    <button id="pickDesk" class="narrowButton" v-if="selectionActive" @click="cancelDeskSelection()">
+        Cancel Selection
     </button>
     <button class="narrowButton" @click="reserveDesk()">
         Confirm and Reserve
@@ -40,7 +42,6 @@ export default {
             var updateDesk = (name, coordinates) => {
                 this.selectedDesk.name = name;
                 this.selectedDesk.coordinates = coordinates;
-                this.selectionActive = !this.selectionActive;
             }
 
             function colorDeskByTitle(deskTitle, selectedColor, defaultColor) {
@@ -113,7 +114,23 @@ export default {
             } catch (error) {
                 console.error('Error adding polygon:', error);
             }
-        }
+        },
+        cancelDeskSelection() {
+            this.selectionActive = false;
+
+            // remove color
+            var pathElements = document.querySelectorAll('path');
+            pathElements.forEach((path) => {
+                var title = path.querySelector('title');
+                if (title && title.textContent === this.selectedDesk.name) {
+                    path.style.fill = "#227093";
+                }
+            });
+
+            this.selectedDesk = { name: "", coordinates: {} }
+            // remove event handler
+            d3.select("#floorplanSvgContainer svg").on("click", null);
+        },
     }
 }
 </script>
