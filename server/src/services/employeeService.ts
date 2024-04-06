@@ -1,6 +1,7 @@
 import express from 'express';
 import { collections } from '../database'; // Assuming you have a database module that exports collections
 import { ObjectId } from 'mongodb';
+import { Employee } from '../models/employee';
 const employeeService = express.Router();
 
 // GET /api/employees/
@@ -21,29 +22,19 @@ employeeService.get('/', async (req, res) => {
 // POST /api/employees/
 employeeService.post('/', async (req, res) => {
     console.log("employeesService / POST /api/employees/ called");
+    const newEmployee: Employee = req.body;
+    //newEmployee._id = new ObjectId(req.body.id);
+    console.log("newEmployee", newEmployee)
     try {
-        const newEmployee = {
-            name: req.body.name,
-            position: req.body.position,
-            level: req.body.level,
-            officeId: req.body.officeId,
-        };
-        if (!collections.employees) {
-            return res.status(500).send('Employees collection not found');
-        }
-        const result = await collections.employees.insertOne(newEmployee);
-        if (!result) {
-            return res.status(500).send('Error inserting employee');
-        }
-        res.status(201).json(newEmployee);
-    } catch (error) {
-        console.error('Error creating employee:', error);
-        if (process.env.NODE_ENV === 'development') {
-            const err = error as Error;
-            res.status(500).send(`Error creating employee: ${err.message}`);
+        const result = await collections.employees?.insertOne(newEmployee);
+        if (result) {
+            res.status(201).json({ message: "Employee created successfully", employeeId: result.insertedId });
         } else {
-            res.status(500).send('Error creating employee');
+            res.status(500).json({ message: "Error creating employee" });
         }
+    } catch (error) {
+        const err = error as Error;
+        res.status(500).json({ message: "Error creating employee", error: err.message });
     }
 });
 
@@ -60,7 +51,8 @@ employeeService.put('/:id', async (req, res) => {
             res.status(404).send('Employee not found');
         }
     } catch (error) {
-        res.status(500).send('Error updating employee');
+        const err = error as Error;
+        res.status(500).json({ message: "Error creating employee", error: err.message });
     }
 });
 

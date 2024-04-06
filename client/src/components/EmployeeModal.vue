@@ -66,8 +66,9 @@ export default {
     },
     async createEmployee() {
       try {
+        delete this.employee.officeId;
+        // this.employee.officeId = this.office._id;
         const response = await axios.post('/api/employees/', this.employee);
-        console.log(response.data);
         this.close();
       } catch (error) {
         console.error('Error creating employee:', error);
@@ -75,7 +76,9 @@ export default {
     },
     async updateEmployee() {
       try {
-        const response = await axios.put(`/api/employees/${this.employee._id}`, this.employee);
+        const employeeId = this.employee._id;
+        delete this.employee._id;
+        const response = await axios.put(`/api/employees/${employeeId}`, this.employee);
         console.log(response.data);
         this.close();
       } catch (error) {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button @click="openModalForCreation()" class="wideButton" type="submit">Create Employee</button>
+    <button @click="openModalForCreation()" class="wideButton">Create Employee</button>
     <ul>
       <li v-for="employee in employees" :key="employee._id" class="listItem">
         <div class="itemText">
@@ -50,47 +50,16 @@ export default {
         console.error('Error fetching employees:', error);
       }
     },
-    async createEmployee() {
-      try {
-        const response = await axios.post('/api/employees', this.employee);
-        this.employees.push(response.data);
-        this.employee.name = '';
-        this.employee.position = '';
-      } catch (error) {
-        console.error('Error creating employee:', error);
-      }
-    },
-    async updateEmployee(id) {
-      try {
-        const response = await axios.put(`/api/employees/${id}`, this.employee);
-        const index = this.employees.findIndex(employee => employee._id === id);
-        if (index !== -1) {
-          this.employees[index] = response.data;
-        }
-        this.employee.name = '';
-        this.employee.position = '';
-        this.isEditing = false;
-      } catch (error) {
-        console.error('Error updating employee:', error);
-      }
-    },
     async deleteEmployee(id) {
-      try {
-        await axios.delete(`/api/employees/${id}`);
-        this.employees = this.employees.filter(employee => employee._id !== id);
-      } catch (error) {
-        console.error('Error deleting employee:', error);
-      }
-    },
-    editEmployee(employee) {
-      this.employee = { ...employee };
-      this.isEditing = true;
-    },
-    submitForm() {
-      if (this.isEditing) {
-        this.updateEmployee(this.employee._id);
-      } else {
-        this.createEmployee();
+      // Confirmation dialog
+      const confirmation = confirm('Are you sure you want to delete this office?');
+      if (confirmation) {
+        try {
+          await axios.delete(`/api/employees/${id}`);
+          this.employees = this.employees.filter(employee => employee._id !== id);
+        } catch (error) {
+          console.error('Error deleting employee:', error);
+        }
       }
     },
     openModalForCreation() {
@@ -110,6 +79,7 @@ export default {
       this.modalTitle = '';
       this.isEditing = false;
       this.employeeToEdit = null;
+      this.fetchEmployees(); // refetch on action
     },
   },
   created() {
