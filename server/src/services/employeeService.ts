@@ -1,12 +1,11 @@
 import express from 'express';
 import { collections } from '../database'; // Assuming you have a database module that exports collections
 import { ObjectId } from 'mongodb';
-
 const employeeService = express.Router();
 
-// GET /api/employee/
+// GET /api/employees/
 employeeService.get('/', async (req, res) => {
-    console.log("employeeService / GET /api/employee/ called");
+    console.log("employeesService / GET /api/employees/ called");
     try {
         const employees = await collections.employees?.find().toArray();
         if (employees) {
@@ -19,25 +18,38 @@ employeeService.get('/', async (req, res) => {
     }
 });
 
-// POST /api/employee/
+// POST /api/employees/
 employeeService.post('/', async (req, res) => {
-    console.log("employeeService / POST /api/employee/ called");
+    console.log("employeesService / POST /api/employees/ called");
     try {
-        const newEmployee = req.body;
-        const result = await collections.employees?.insertOne(newEmployee);
-        if (result) {
-            res.status(201).send(newEmployee);
-        } else {
-            res.status(400).send('Error creating employee');
+        const newEmployee = {
+            name: req.body.name,
+            position: req.body.position,
+            level: req.body.level,
+            officeId: req.body.officeId,
+        };
+        if (!collections.employees) {
+            return res.status(500).send('Employees collection not found');
         }
+        const result = await collections.employees.insertOne(newEmployee);
+        if (!result) {
+            return res.status(500).send('Error inserting employee');
+        }
+        res.status(201).json(newEmployee);
     } catch (error) {
-        res.status(500).send('Error creating employee');
+        console.error('Error creating employee:', error);
+        if (process.env.NODE_ENV === 'development') {
+            const err = error as Error;
+            res.status(500).send(`Error creating employee: ${err.message}`);
+        } else {
+            res.status(500).send('Error creating employee');
+        }
     }
 });
 
-// PUT /api/employee/id
+// PUT /api/employees/id
 employeeService.put('/:id', async (req, res) => {
-    console.log("employeeService / PUT /api/employee/:id called");
+    console.log("employeesService / PUT /api/employees/:id called");
     try {
         const updatedEmployee = req.body;
         const id = new ObjectId(req.params.id);
@@ -52,9 +64,9 @@ employeeService.put('/:id', async (req, res) => {
     }
 });
 
-// DELETE /api/employee/id
+// DELETE /api/employees/id
 employeeService.delete('/:id', async (req, res) => {
-    console.log("employeeService / DELETE /api/employee/:id called");
+    console.log("employeesService / DELETE /api/employees/:id called");
     try {
         const id = new ObjectId(req.params.id);
         const result = await collections.employees?.deleteOne({ _id: id });

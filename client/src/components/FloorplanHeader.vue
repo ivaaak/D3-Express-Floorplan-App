@@ -50,7 +50,6 @@ export default {
             currentDate: '',
             modalTitle: '',
             modalMessage: '',
-            reservation: undefined,
         };
     },
     props: {
@@ -64,20 +63,10 @@ export default {
         },
     },
     methods: {
-        async fetchReservations(datePicked) {
-            try {
-                const response = await axios.get(`/api/reservations/${datePicked}`);
-                this.reservation = response.data;
-                console.log("reservations", this.reservation)
-            } catch (error) {
-                console.error('Error fetching office details:', error);
-            }
-        },
         openDialog() {
             this.modalTitle = 'Dialog';
             this.modalMessage = "Edit the office:";
             this.showModal = true;
-            console.log("desksCount", this.desksCount)
         },
         closeModal() {
             this.showModal = false;
@@ -93,13 +82,6 @@ export default {
             } else {
                 return this.currentDate;
             }
-        }
-    },
-    async mounted() {
-        if(!this.datePicked) {
-            await this.fetchReservations(this.currentDate);
-        } else {
-            await this.fetchReservations(this.datePicked);
         }
     },
     computed: {

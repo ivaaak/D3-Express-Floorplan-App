@@ -1,24 +1,31 @@
 <template>
   <div>
-    <form @submit.prevent="submitForm">
-      <input v-model="employee.name" placeholder="Employee Name" required />
-      <input v-model="employee.position" placeholder="Position" required />
-      <button  class="wideButton" type="submit">{{ isEditing ? 'Update Employee' : 'Create Employee' }}</button>
-    </form>
+    <button @click="openModalForCreation()" class="wideButton" type="submit">Create Employee</button>
     <ul>
       <li v-for="employee in employees" :key="employee._id" class="listItem">
-        {{ employee.name }} - {{ employee.position }} - {{ employee.level }}
-        <button class="narrowButton" @click="editEmployee(employee)">Edit</button>
-        <button class="narrowButton" @click="deleteEmployee(employee._id)">Delete</button>
+        <div class="itemText">
+          {{ employee.name }} - {{ employee.position }} - {{ employee.level }}
+        </div>
+        <div>
+          <button class="narrowButton" @click="openModalForEditing(employee)">Edit</button>
+          <button class="narrowButton" @click="deleteEmployee(employee._id)">Delete</button>
+        </div>
       </li>
     </ul>
   </div>
+  <EmployeeModal :show="showModal" :title="modalTitle" :message="modalMessage" :is-editing="isEditing"
+    :data="employeeToEdit" @close="closeModal" />
 </template>
 
+
 <script>
+import EmployeeModal from './EmployeeModal.vue';
 import axios from 'axios';
 
 export default {
+  components: {
+    EmployeeModal
+  },
   data() {
     return {
       employees: [],
@@ -27,6 +34,11 @@ export default {
         position: '',
       },
       isEditing: false,
+      modalTitle: 'Add an employee',
+      modalMessage: 'Message here',
+      showModal: false,
+      isEditing: false,
+      employeeToEdit: null,
     };
   },
   methods: {
@@ -81,9 +93,48 @@ export default {
         this.createEmployee();
       }
     },
+    openModalForCreation() {
+      this.showModal = true;
+      this.modalTitle = 'Create New Employee';
+      this.isEditing = false;
+      this.employeeToEdit = null;
+    },
+    openModalForEditing(employee) {
+      this.showModal = true;
+      this.modalTitle = 'Edit Employee';
+      this.isEditing = true;
+      this.employeeToEdit = employee;
+    },
+    closeModal() {
+      this.showModal = false;
+      this.modalTitle = '';
+      this.isEditing = false;
+      this.employeeToEdit = null;
+    },
   },
   created() {
     this.fetchEmployees();
   },
 };
 </script>
+
+<style>
+.listItem {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.itemText {
+  text-align: center;
+  margin: 4px;
+}
+
+/* Add this to ensure buttons are on the same row */
+.listItem>div:last-child {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+</style>

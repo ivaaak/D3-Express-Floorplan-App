@@ -44,7 +44,6 @@ export default {
       try {
         const response = await axios.get(`/api/reservations/${datePicked}`);
         this.reservations = response.data;
-        console.log("reservations", this.reservations)
       } catch (error) {
         console.error('Error fetching office details:', error);
       }
@@ -52,10 +51,8 @@ export default {
   },
   async mounted() {
     if (!this.datePicked) {
-      console.log("this.currentDate", this.currentDate)
       await this.fetchReservations(this.currentDate);
     } else {
-      console.log("this.datePicked", this.datePicked)
       await this.fetchReservations(this.datePicked);
     }
   },
