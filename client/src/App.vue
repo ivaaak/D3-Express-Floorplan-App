@@ -162,7 +162,7 @@ export default {
     loadPolygonData(polygonDataSource) {
       this.mapdata[this.overlays.id()] = polygonDataSource;
     },
-    async colorReservedDesks() {
+    async colorAndLabelReservedDesks() {
       var reservationsArray = await this.fetchReservations("2024-04-05"); // change to this.datePicked
       var pathElements = document.querySelectorAll('path');
 
@@ -173,6 +173,19 @@ export default {
       pathElements.forEach((path) => {
         var title = path.querySelector('title');
         if (title) {
+          // Create desk Label and append it to svg
+          const svgNS = "http://www.w3.org/2000/svg";
+          const newTextElement = document.createElementNS(svgNS, 'text');
+          newTextElement.textContent = title.textContent;
+          const bbox = path.getBBox();
+          const x = bbox.x + bbox.width / 3;
+          const y = bbox.y + bbox.height / 1.5;
+          newTextElement.setAttribute('x', x); // Horizontal position
+          newTextElement.setAttribute('y', y); // Vertical position
+          newTextElement.setAttribute('font-size', '20'); // Font size
+          newTextElement.setAttribute('fill', 'black'); // Text color
+          path.parentNode.appendChild(newTextElement);
+
           if (allDeskIds.includes(title.textContent)) {
             path.style.fill = '#FF0000';
           }
@@ -193,6 +206,7 @@ export default {
     handleToggleDesksEditable(isEditable) {
       console.log('Desks are now editable:', isEditable);
       this.toggleDesksEditable();
+      this.colorAndLabelReservedDesks();
     },
   },
   async mounted() {
@@ -201,7 +215,7 @@ export default {
     this.loadTooltipOnPolygons();
     //this.addDebugD3ClickListener();
     this.renderD3FloorplanLayers();
-    this.colorReservedDesks();
+    this.colorAndLabelReservedDesks();
   }
 }
 </script>
