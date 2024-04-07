@@ -1,10 +1,9 @@
 <template>
   <div>
-    <ul>
+    <ul v-if="reservations">
       <li v-for="(reservation, index) in reservations" :key="index">
         <ul>
           <li><strong>ID:</strong> {{ reservation._id }}</li>
-          <!-- <li><strong>Desk ID:</strong> {{ reservation.deskId }}</li> -->
           <li><strong>Date:</strong> {{ reservation.date }}</li>
           <li><strong>Office ID:</strong> {{ reservation.officeId }}</li>
           <li><strong>Employee ID:</strong> {{ reservation.employeeId }}</li>
@@ -16,11 +15,15 @@
         </ul>
       </li>
     </ul>
+    <div v-if="(!reservations)" class="noResults">
+      No reservations found for {{ datePicked ? datePicked : currentDate }}
+    </div>
   </div>
 </template>
 
 <script>
 import axios from 'axios';
+import moment from 'moment';
 
 export default {
   data() {
@@ -46,21 +49,43 @@ export default {
         this.reservations = response.data;
       } catch (error) {
         console.error('Error fetching office details:', error);
+        this.reservations = null;
       }
     },
+    getTodaysDate() {
+      this.currentDate = moment().format('YYYY-MM-DD');
+      return this.currentDate;
+    }
   },
   async mounted() {
     if (!this.datePicked) {
+      this.getTodaysDate();
       await this.fetchReservations(this.currentDate);
     } else {
       await this.fetchReservations(this.datePicked);
     }
   },
-  computed: {
-    currentTime() {
-      this.currentDate = moment().format('YYYY-MM-DD');
-      return this.currentDate;
+  watch: {
+    datePicked: {
+      immediate: true,
+      handler(newValue) {
+        if (newValue) {
+          const formattedDate = moment(newValue).format('YYYY-MM-DD');
+          this.fetchReservations(formattedDate);
+        }
+      }
     }
   }
 };
 </script>
+
+<style>
+ul {
+  width: 150%;
+}
+
+.noResults {
+  width: 400px;
+  font-size: 20px;
+}
+</style>

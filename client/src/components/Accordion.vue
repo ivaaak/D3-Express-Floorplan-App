@@ -5,20 +5,21 @@
         </div>
         <div class="tab">
             <ColorLegend></ColorLegend>
-            <VueDatePicker v-model="date"></VueDatePicker>
+            <VueDatePicker v-model="date" :format="formatDate"></VueDatePicker>
         </div>
         <div class="tab">
             <input class="transparentInput" type="checkbox" name="accordion-2" id="cb2">
             <label for="cb2" class="tab__label">Reserve a Desk</label>
             <div class="tab__content">
-                <DeskPicker></DeskPicker>
+                <DeskPicker :datePicked="datePicked" @reservation-completed="handleReservationCompleted"></DeskPicker>
             </div>
         </div>
         <div class="tab">
             <input class="transparentInput" type="checkbox" name="accordion-3" id="cb3">
-            <label for="cb3" class="tab__label">Check Reservations</label>
+            <label for="cb3" class="tab__label"> Reservations for {{ formatDate(date) }}</label>
             <div class="tab__content">
-                <Reservations :datePicked="datePicked" v-bind="$attrs"></Reservations>
+                <Reservations :datePicked="datePicked" v-bind="$attrs">
+                </Reservations>
             </div>
         </div>
         <div class="tab-header">
@@ -72,7 +73,7 @@ import Reservations from './Reservations.vue';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import ColorLegend from './ColorLegend.vue'
 import '@vuepic/vue-datepicker/dist/main.css'
-import moment from 'moment';
+import { ref } from 'vue';
 
 export default {
     components: {
@@ -88,7 +89,7 @@ export default {
     },
     data() {
         return {
-            date: this.getTodaysDate(),
+            date: ref(new Date()),
             datePicked: null,
         };
     },
@@ -96,23 +97,28 @@ export default {
         handleToggleDesksEditable(isEditable) {
             this.$emit('toggle-desks-editable', isEditable);
         },
+        handleReservationCompleted(isCompleted) {
+            this.$emit('reservation-completed', isCompleted);
+        },
         formatDate(date) {
             if (typeof date === 'string') {
                 date = new Date(date);
             }
             const day = date.getDate();
-            const month = date.getMonth() + 1; // Months are 0-based, so we add 1
+            const month = date.getMonth() + 1;
             const year = date.getFullYear();
             return `${day} / ${month} / ${year}`;
         },
-        getTodaysDate() {
-            return moment().format('DD MM YYYY HH:mm');
-        }
     },
     watch: {
         date(newDate) {
             this.datePicked = newDate;
             this.$emit('date-changed', newDate);
+        }
+    },
+    mounted() {
+        if (!this.datePicked) {
+            this.datePicked = this.date;
         }
     }
 }

@@ -16,18 +16,6 @@ reservationService.get('/', async (req, res) => {
     }
 });
 
-// POST /api/reservations/
-reservationService.post('/', async (req, res) => {
-    try {
-        console.log("reservationService / POST called");
-        const newReservation = req.body;
-        const result = await collections.reservations?.insertOne(newReservation);
-        res.status(201).json(newReservation);
-    } catch (error) {
-        console.error("Error creating reservation:", error);
-        res.status(500).json({ message: "Error creating reservation" });
-    }
-});
 
 // GET /api/reservations/:date
 reservationService.get('/:date', async (req, res) => {
@@ -56,23 +44,37 @@ reservationService.get('/:date', async (req, res) => {
 });
 
 
-
-// PUT /api/reservations/:id
-reservationService.put('/:id', async (req, res) => {
+// POST /api/reservations/
+reservationService.post('/', async (req, res) => {
     try {
-        console.log("reservationService / PUT called");
-        const { id } = req.params;
-        const update = req.body;
-        const result = await collections.reservations?.updateOne({ _id: new ObjectId(id) }, { $set: update });
-        if (result && result.matchedCount === 0) {
-            return res.status(404).json({ message: "Reservation not found" });
-        }
-        res.json({ message: "Reservation updated successfully" });
+        console.log("reservationService / POST called");
+        const newReservation = req.body;
+        const result = await collections.reservations?.insertOne(newReservation);
+        res.status(201).json(newReservation);
     } catch (error) {
-        console.error("Error updating reservation:", error);
-        res.status(500).json({ message: "Error updating reservation" });
+        console.error("Error creating reservation:", error);
+        res.status(500).json({ message: "Error creating reservation" });
     }
 });
+
+
+// // PUT /api/reservations/:id
+// reservationService.put('/:id', async (req, res) => {
+//     try {
+//         console.log("reservationService / PUT called");
+//         const { id } = req.params;
+//         const update = req.body;
+//         const result = await collections.reservations?.updateOne({ _id: new ObjectId(id) }, { $set: update });
+//         if (result && result.matchedCount === 0) {
+//             return res.status(404).json({ message: "Reservation not found" });
+//         }
+//         res.json({ message: "Reservation updated successfully" });
+//     } catch (error) {
+//         console.error("Error updating reservation:", error);
+//         res.status(500).json({ message: "Error updating reservation" });
+//     }
+// });
+
 
 // DELETE /api/reservations/:id
 reservationService.delete('/:id', async (req, res) => {
@@ -90,35 +92,49 @@ reservationService.delete('/:id', async (req, res) => {
     }
 });
 
-// PATCH /api/reservations/add-desk/:date
-reservationService.patch('/add-desk/:date', async (req, res) => {
+
+// // PUT /api/reservations/add-desk
+reservationService.put('/add-desk', async (req, res) => {
     try {
-        console.log("reservationService / PATCH add-desk called");
-        const { date } = req.params;
-        const { deskId } = req.body;
+        console.log("reservationService/add-desk / PUT called");
+        const { date, deskId, employeeId } = req.body;
 
-        // Find the reservation by date
-        const reservation = await collections.reservations?.findOne({ date });
-        if (!reservation) {
-            return res.status(404).json({ message: "Reservation not found for the given date" });
+        // Attempt to find an existing reservation by date
+        const existingReservation = await collections.reservations?.findOne({ date });
+        console.log("existingReservation", existingReservation);
+
+        if (existingReservation) {
+            // If a reservation exists, update it
+            const updateResult = await collections.reservations?.updateOne(
+                { _id: existingReservation._id },
+                { $push: { deskIds: deskId } }
+            );
+
+            if (updateResult && updateResult.matchedCount === 0) {
+                return res.status(404).json({ message: "Reservation not found for the given date" });
+            }
+
+            // Retrieve the updated reservation to return
+            const updatedReservation = await collections.reservations?.findOne({ _id: existingReservation._id });
+            res.json(updatedReservation);
+        } else {
+            const newReservation = {
+                date,
+                deskIds: [deskId],
+                employeeId,
+            };
+            console.log("newReservation", newReservation);
+    
+            const result = await collections.reservations?.insertOne(newReservation);
+            if (!newReservation) {
+                return res.status(500).json({ message: "Failed to create new reservation" });
+            }
+
+            res.status(201).json(newReservation);
         }
-
-        // Add the new deskId to the reservation's deskIds array
-        const updateResult = await collections.reservations?.updateOne(
-            { _id: reservation._id },
-            { $push: { deskIds: deskId } }
-        );
-
-        if (updateResult && updateResult.matchedCount === 0) {
-            return res.status(404).json({ message: "Reservation not found for the given date" });
-        }
-
-        // Retrieve the updated reservation to return
-        const updatedReservation = await collections.reservations?.findOne({ _id: reservation._id });
-        res.json(updatedReservation);
     } catch (error) {
-        console.error("Error adding desk to reservation:", error);
-        res.status(500).json({ message: "Error adding desk to reservation" });
+        console.error("Error processing reservation:", error);
+        res.status(500).json({ message: "Error processing reservation" });
     }
 });
 

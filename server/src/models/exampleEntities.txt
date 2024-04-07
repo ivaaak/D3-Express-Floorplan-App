@@ -1,157 +1,30 @@
-Desk:
+// Employee
 {
     "_id": {
-        "$oid": "65febcaa5f39a20c439ff0ea"
+        "$oid": "660e7d95229f221d65c4767c"
     },
-    "name": "test desk name",
     "officeId": {
         "$oid": "60febcaa5f39a20c439ff0ea"
     },
-    "coordinates": [
-        {
-            "x": 12,
-            "y": 12
-        }
-    ]
+    "name": "John Doe",
+    "position": "Software Engineer",
+    "level": "mid"
 }
 
-Employee: 
-{
-    "_id": {
-        "$oid": "65febcaa5f39a20c439ff0ea"
-    },
-    "name": "Ivo",
-    "position": "Develops",
-    "level": "senior"
-}
 
-Floorplan: 
+// Office
 {
     "_id": {
-        "$oid": "66086bc7b94718ed9fbdb543"
+        "$oid": "660ee1f6bc39795aefd527a0"
     },
-    "heatmap": {
-        "binSize": {
-            "$numberDouble": "1.5"
-        },
-        "units": "°C",
-        "map": [
-            {
-                "x": {
-                    "$numberInt": "2"
-                },
-                "y": {
-                    "$numberInt": "22"
-                },
-                "value": {
-                    "$numberInt": "22"
-                }
-            },
-            {
-                "x": {
-                    "$numberInt": "2"
-                },
-                "y": {
-                    "$numberInt": "27"
-                },
-                "value": {
-                    "$numberDouble": "20.2"
-                }
-            },
-            {
-                "x": {
-                    "$numberInt": "7"
-                },
-                "y": {
-                    "$numberInt": "22"
-                },
-                "value": {
-                    "$numberDouble": "11.7"
-                }
-            },
-            {
-                "x": {
-                    "$numberInt": "7"
-                },
-                "y": {
-                    "$numberInt": "27"
-                },
-                "value": {
-                    "$numberDouble": "9.7"
-                }
-            },
-            {
-                "x": {
-                    "$numberInt": "12"
-                },
-                "y": {
-                    "$numberInt": "22"
-                },
-                "value": {
-                    "$numberDouble": "20.5"
-                }
-            },
-            {
-                "x": {
-                    "$numberInt": "12"
-                },
-                "y": {
-                    "$numberInt": "27"
-                },
-                "value": {
-                    "$numberDouble": "39.3"
-                }
-            },
-            {
-                "value": {
-                    "$numberDouble": "19.9"
-                },
-                "points": [
-                    {
-                        "x": {
-                            "$numberDouble": "1.2"
-                        },
-                        "y": {
-                            "$numberInt": "11"
-                        }
-                    },
-                    {
-                        "x": {
-                            "$numberDouble": "8.5"
-                        },
-                        "y": {
-                            "$numberInt": "2"
-                        }
-                    },
-                    {
-                        "x": {
-                            "$numberInt": "32"
-                        },
-                        "y": {
-                            "$numberInt": "2"
-                        }
-                    },
-                    {
-                        "x": {
-                            "$numberDouble": "31.5"
-                        },
-                        "y": {
-                            "$numberDouble": "19.5"
-                        }
-                    },
-                    {
-                        "x": {
-                            "$numberDouble": "1.2"
-                        },
-                        "y": {
-                            "$numberDouble": "20.5"
-                        }
-                    }
-                ]
-            }
-        ]
-    },
-    "overlays": {
+    "name": "Blubito AG",
+    "imageUrls": [
+        "https://example.com/image1.jpg",
+        "https://example.com/image2.jpg",
+        "https://static.dezeen.com/uploads/2019/05/synchroon-office-space-encounters-interiors-utrecht-netherlands_dezeen_floor-plan.jpg"
+    ],
+    "chosenFloorplan": "https://static.dezeen.com/uploads/2019/05/synchroon-office-space-encounters-interiors-utrecht-netherlands_dezeen_floor-plan.jpg",
+    "coordinates": {
         "polygons": [
             {
                 "id": "p1",
@@ -162,7 +35,7 @@ Floorplan:
                             "$numberDouble": "1.2"
                         },
                         "y": {
-                            "$numberInt": "11"
+                            "$numberDouble": "11.0"
                         }
                     },
                     {
@@ -170,7 +43,7 @@ Floorplan:
                             "$numberDouble": "8.5"
                         },
                         "y": {
-                            "$numberInt": "2"
+                            "$numberDouble": "2.0"
                         }
                     },
                     {
@@ -178,7 +51,7 @@ Floorplan:
                             "$numberInt": "32"
                         },
                         "y": {
-                            "$numberInt": "2"
+                            "$numberDouble": "2.0"
                         }
                     },
                     {
@@ -352,113 +225,57 @@ Floorplan:
                 ]
             }
         ]
-    }
-}
-
-Office: 
-{
-    "_id": {
-        "$oid": "66093e01aba993e2f78cc690"
     },
-    "name": "Example Office",
-    "imageUrls": [
-        "https://example.com/image1.jpg",
-        "https://example.com/image2.jpg"
-    ],
-    "chosenFloorplan": "floorplan123"
-}
-
-
-Reserve: 
-{
-    "_id": {
-        "$oid": "660ada36efebdef829288d01"
-    },
-    "deskId": {
-        "$oid": "60d5ecb8b392d23410a8b7d1"
-    },
-    "date": "2023-04-01T09:00:00.000Z",
-    "employeeId": {
-        "$oid": "65febcaa5f39a20c439ff0ea"
-    },
-    "deskOverlays": {
-        "polygons": [
+    "areas": {
+        "binSize": {
+            "$numberInt": "10"
+        },
+        "units": "meters",
+        "map": [
             {
-                "id": "polygon1",
-                "name": "Desk Area",
+                "x": {
+                    "$numberInt": "16"
+                },
+                "y": {
+                    "$numberInt": "16"
+                },
+                "value": {
+                    "$numberInt": "50"
+                },
                 "points": [
                     {
                         "x": {
-                            "$numberDouble": "10.0"
+                            "$numberInt": "16"
                         },
                         "y": {
-                            "$numberDouble": "20.0"
-                        }
-                    },
-                    {
-                        "x": {
-                            "$numberDouble": "30.0"
-                        },
-                        "y": {
-                            "$numberDouble": "20.0"
-                        }
-                    },
-                    {
-                        "x": {
-                            "$numberDouble": "30.0"
-                        },
-                        "y": {
-                            "$numberDouble": "40.0"
-                        }
-                    },
-                    {
-                        "x": {
-                            "$numberDouble": "10.0"
-                        },
-                        "y": {
-                            "$numberDouble": "40.0"
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "polygon2",
-                "name": "Desk Area 2",
-                "points": [
-                    {
-                        "x": {
-                            "$numberInt": "20"
-                        },
-                        "y": {
-                            "$numberInt": "30"
-                        }
-                    },
-                    {
-                        "x": {
-                            "$numberInt": "40"
-                        },
-                        "y": {
-                            "$numberInt": "30"
-                        }
-                    },
-                    {
-                        "x": {
-                            "$numberInt": "40"
-                        },
-                        "y": {
-                            "$numberInt": "50"
-                        }
-                    },
-                    {
-                        "x": {
-                            "$numberInt": "20"
-                        },
-                        "y": {
-                            "$numberInt": "50"
+                            "$numberInt": "16"
                         }
                     }
                 ]
             }
         ]
     }
+}
+
+
+// Reservation
+{
+    "_id": {
+        "$oid": "660e7e7a229f221d65c47680"
+    },
+    "deskId": {
+        "$oid": "60febcaa5f39a20c439ff0ea"
+    },
+    "date": "2024-04-05",
+    "officeId": {
+        "$oid": "660e7f1c229f221d65c47681"
+    },
+    "employeeId": {
+        "$oid": "60febcaa5f39a20c439ff0ec"
+    },
+    "deskIds": [
+        "desk1",
+        "desk2",
+        "desk3"
+    ]
 }

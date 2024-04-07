@@ -15,7 +15,7 @@ export default {
             legendItems: [
                 { color: '#FF0000', text: 'Reserved Desk' },
                 { color: '#227093', text: 'Free Desk' },
-                { color: '#90EE90', text: 'Selected Desk' },
+                { color: '#0f640f', text: 'Selected Desk' },
             ],
         };
     },

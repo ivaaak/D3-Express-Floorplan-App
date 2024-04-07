@@ -17,12 +17,15 @@
 
 <script>
 import axios from 'axios';
+import moment from 'moment';
 
 export default {
+    emits: {
+        'reservation-completed': Boolean
+    },
     data() {
         return {
             selectionActive: false,
-            selectedDate: "2023-04-01T09:00:00.000Z",
             selectedDesk: {
                 name: "",
                 coordinates: {}
@@ -33,7 +36,14 @@ export default {
                 name: "",
                 points: null,
             },
+            isCompleted: true,
         };
+    },
+    props: {
+        datePicked: {
+            type: Date,
+            required: false,
+        },
     },
     methods: {
         pickDesk() {
@@ -87,7 +97,7 @@ export default {
                     var normalizedPolygon = normalizeCoordinates(target.getAttribute("d"));
                     if (titleElement) {
                         // Ensure colorDeskByTitle is called with the correct context
-                        colorDeskByTitle.call(this, titleElement.textContent, "#FF0000", "#227093");
+                        colorDeskByTitle.call(this, titleElement.textContent, "#0f640f", "#227093");
                         updateDesk.call(this, titleElement.textContent, normalizedPolygon);
                     } else {
                         console.log("No title found for the clicked polygon.");
@@ -98,21 +108,18 @@ export default {
             d3.select("#floorplanSvgContainer svg").on("click", handlePolygonClick);
         },
         async reserveDesk() {
-            console.log("reserveDesk selectedDesk", this.selectedDesk);
-            this.polygon = {
-                id: this.selectedDesk.name,
-                name: this.selectedDesk.name,
-                points: this.selectedDesk.coordinates,
-            };
-
+            const employeeId = "660e7d95229f221d65c4767c"; // Replace this with the actual employee ID
             try {
-                const response = await axios.post('/api/reservations/addPolygon', { //TODO
-                    selectedDate: this.selectedDate,
-                    polygon: this.polygon,
+                const response = await axios.put('/api/reservations/add-desk', {
+                    date: moment(this.datePicked).format('YYYY-MM-DD'),
+                    deskId: this.selectedDesk.name,
+                    employeeId: employeeId,
                 });
-                console.log('Polygon added successfully:', response.data); // only save array of desk names?
+                // refresh SVG
+                this.isCompleted = true;
+                this.$emit('reservation-completed', this.isCompleted);
             } catch (error) {
-                console.error('Error adding polygon:', error);
+                console.error('Error adding reservation:', error);
             }
         },
         cancelDeskSelection() {

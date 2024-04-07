@@ -7,7 +7,8 @@
         <div id="floorplanSvgContainer"></div> <!-- Main Floorplan Container Div -->
         <div id="tooltip" style="position: absolute; opacity: 0;"></div>
       </div>
-      <Accordion id="sidepanel" @date-changed="handleDateChange" @toggle-desks-editable="handleToggleDesksEditable">
+      <Accordion id="sidepanel" @date-changed="handleDateChange" @toggle-desks-editable="handleToggleDesksEditable"
+        @reservation-completed="handleReservationCompleted">
       </Accordion>
     </div>
   </main>
@@ -20,6 +21,7 @@ import Accordion from './components/Accordion.vue'
 // import heatmapData from './data/heatmapAreas.json';
 // import polygonData from './data/polygons.json';
 import axios from 'axios';
+import moment from 'moment';
 
 export default {
   components: {
@@ -163,12 +165,13 @@ export default {
       this.mapdata[this.overlays.id()] = polygonDataSource;
     },
     async colorAndLabelReservedDesks() {
-      var reservationsArray = await this.fetchReservations("2024-04-05"); // change to this.datePicked
+      var reservationsArray = await this.fetchReservations(this.datePicked);
       var pathElements = document.querySelectorAll('path');
-
-      var allDeskIds = reservationsArray.reduce((acc, curr) => {
-        return acc.concat(curr.deskIds);
-      }, []);
+      if (reservationsArray) {
+        var allDeskIds = reservationsArray.reduce((acc, curr) => {
+          return acc.concat(curr.deskIds);
+        }, []);
+      }
 
       pathElements.forEach((path) => {
         var title = path.querySelector('title');
@@ -186,13 +189,16 @@ export default {
           newTextElement.setAttribute('fill', 'black'); // Text color
           path.parentNode.appendChild(newTextElement);
 
-          if (allDeskIds.includes(title.textContent)) {
+          if (allDeskIds && allDeskIds.includes(title.textContent)) {
             path.style.fill = '#FF0000';
           }
         }
       });
     },
     async fetchReservations(datePicked) {
+      if (!datePicked) {
+        datePicked = moment().format('YYYY-MM-DD');
+      }
       try {
         const response = await axios.get(`/api/reservations/${datePicked}`);
         return response.data;
@@ -206,6 +212,10 @@ export default {
     handleToggleDesksEditable(isEditable) {
       console.log('Desks are now editable:', isEditable);
       this.toggleDesksEditable();
+      this.colorAndLabelReservedDesks();
+    },
+    handleReservationCompleted(isCompleted) {
+      this.refreshD3FloorplanLayers();
       this.colorAndLabelReservedDesks();
     },
   },
