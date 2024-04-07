@@ -4,6 +4,7 @@
             <h1> Reserve: </h1>
         </div>
         <div class="tab">
+            <ColorLegend></ColorLegend>
             <VueDatePicker v-model="date"></VueDatePicker>
         </div>
         <div class="tab">
@@ -69,6 +70,7 @@ import ManageFloorplans from './ManageFloorplans.vue';
 import DeskPicker from './DeskPicker.vue';
 import Reservations from './Reservations.vue';
 import VueDatePicker from '@vuepic/vue-datepicker';
+import ColorLegend from './ColorLegend.vue'
 import '@vuepic/vue-datepicker/dist/main.css'
 import moment from 'moment';
 
@@ -81,11 +83,13 @@ export default {
         ManageFloorplans,
         DeskPicker,
         VueDatePicker,
-        Reservations
+        Reservations,
+        ColorLegend
     },
     data() {
         return {
             date: this.getTodaysDate(),
+            datePicked: null,
         };
     },
     methods: {
@@ -107,6 +111,7 @@ export default {
     },
     watch: {
         date(newDate) {
+            this.datePicked = newDate;
             this.$emit('date-changed', newDate);
         }
     }

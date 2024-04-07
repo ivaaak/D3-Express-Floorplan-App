@@ -11,6 +11,7 @@
 import axios from 'axios';
 
 export default {
+  emits: ['toggleDesksEditable'],
   data() {
     return {
       toggleDesksEditable: false,

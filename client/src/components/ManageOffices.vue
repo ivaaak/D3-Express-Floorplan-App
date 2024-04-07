@@ -1,18 +1,5 @@
 <template>
   <div>
-    <!-- <form @submit.prevent="submitForm">
-      <button v-if="!isEditing && !selectionCompleted"
-       @click="selectDeskCoordinates()" class="wideButton">
-        Select 4 Points To Create A Desk
-      </button>
-      <div v-if="!isEditing && selectionCompleted"> Points selected: {{ pointsSelected }}</div>
-      <button v-if="!isEditing" class="wideButton" v-bind:disabled="!selectionCompleted">
-        Create Desk
-      </button>
-      <button v-if="isEditing" class="wideButton">
-        Update Desk
-      </button>
-    </form> -->
     <button @click="openModalForCreation()" class="wideButton"> Create Office </button>
 
     <ul>
@@ -47,6 +34,7 @@ export default {
       modalTitle: 'Add an employee',
       modalMessage: 'Message here',
       showModal: false,
+      officeToEdit: undefined,
     };
   },
   methods: {

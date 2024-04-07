@@ -135,7 +135,7 @@ export default {
 
       d3.select("#floorplanSvgContainer").append("svg")
         .attr("height", dimensions.height).attr("width", dimensions.width)
-        .datum(this.mapdata).call(this.map);
+        .datum(this.mapdata).call(this.map); // D3 apply errors here randomly
     },
     removeSVGCanvasElement() {
       var svgElement = document.querySelector('svg');
@@ -162,9 +162,8 @@ export default {
     loadPolygonData(polygonDataSource) {
       this.mapdata[this.overlays.id()] = polygonDataSource;
     },
-    //TODO fetch reservations, check all deskIds if they are reserved or not, color reserved desks
     async colorReservedDesks() {
-      var reservationsArray = await this.fetchReservations("2024-04-05");
+      var reservationsArray = await this.fetchReservations("2024-04-05"); // change to this.datePicked
       var pathElements = document.querySelectorAll('path');
 
       var allDeskIds = reservationsArray.reduce((acc, curr) => {
