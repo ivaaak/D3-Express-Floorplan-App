@@ -8,7 +8,7 @@
         </div>
         <div class="tab">
             <input class="transparentInput" type="checkbox" name="accordion-2" id="cb2">
-            <label for="cb2" class="tab__label">Pick a Desk</label>
+            <label for="cb2" class="tab__label">Reserve a Desk</label>
             <div class="tab__content">
                 <DeskPicker></DeskPicker>
             </div>
@@ -39,9 +39,9 @@
         </div>
         <div class="tab">
             <input class="transparentInput" type="checkbox" name="accordion-6" id="cb6">
-            <label for="cb6" class="tab__label">Manage Floorplans</label>
+            <label for="cb6" class="tab__label">Adjust Desk Locations</label>
             <div class="tab__content">
-                <ManageFloorplans></ManageFloorplans>
+                <ManageFloorplans @toggle-desks-editable="handleToggleDesksEditable"></ManageFloorplans>
             </div>
         </div>
         <div class="tab">
@@ -89,6 +89,9 @@ export default {
         };
     },
     methods: {
+        handleToggleDesksEditable(isEditable) {
+            this.$emit('toggle-desks-editable', isEditable);
+        },
         formatDate(date) {
             if (typeof date === 'string') {
                 date = new Date(date);

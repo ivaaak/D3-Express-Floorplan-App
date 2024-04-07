@@ -1,4 +1,9 @@
 <template>
+    <button v-if="canEditDesks" @click="emitToggleDesksEditable()" class="wideButton">
+      Edit Desk Positons:
+    </button>
+    <button class="wideButton"> Add a Desk </button>
+    <button class="wideButton" v-bind:disabled="!hasBeenEdited"> Save Desk Positions </button>
 
 </template>
 
@@ -8,25 +13,20 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      office: undefined,
-      desks: undefined,
-      floorImageUrl: undefined,
+      toggleDesksEditable: false,
+      hasBeenEdited: false,
+      canEditDesks: true,
     };
   },
   methods: {
-    async fetchOfficeDetails() {
-      try {
-        const response = await axios.get(`/api/offices/`);
-        this.office = response.data.find(office => office.name === "Blubito AG");
-        this.desks = this.office.coordinates;
-        this.floorImageUrl = this.office.chosenFloorplan;
-      } catch (error) {
-        console.error('Error fetching office details:', error);
-      }
+    emitToggleDesksEditable() {
+      this.deskObjectsEditable = !this.deskObjectsEditable;
+      this.hasBeenEdited = true;
+      this.$emit('toggle-desks-editable', this.deskObjectsEditable);
     },
-    async mounted() {
-      await this.fetchOfficeDetails();
-    }
+    //TODO get all desks locations
+    //TODO save all desks in current locations
+
   },
 };
 </script>

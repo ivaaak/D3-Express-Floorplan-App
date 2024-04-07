@@ -6,9 +6,8 @@
         <FloorplanHeader :desksCount="desks" :datePicked="datePicked" v-bind="$attrs"></FloorplanHeader>
         <div id="floorplanSvgContainer"></div> <!-- Main Floorplan Container Div -->
         <div id="tooltip" style="position: absolute; opacity: 0;"></div>
-        <button v-if="canEditDesks" @click="this.toggleDesksEditable()"> Edit desks: </button>
       </div>
-      <Accordion id="sidepanel" @date-changed="handleDateChange">
+      <Accordion id="sidepanel" @date-changed="handleDateChange" @toggle-desks-editable="handleToggleDesksEditable">
       </Accordion>
     </div>
   </main>
@@ -163,9 +162,39 @@ export default {
     loadPolygonData(polygonDataSource) {
       this.mapdata[this.overlays.id()] = polygonDataSource;
     },
+    //TODO fetch reservations, check all deskIds if they are reserved or not, color reserved desks
+    async colorReservedDesks() {
+      var reservationsArray = await this.fetchReservations("2024-04-05");
+      var pathElements = document.querySelectorAll('path');
+
+      var allDeskIds = reservationsArray.reduce((acc, curr) => {
+        return acc.concat(curr.deskIds);
+      }, []);
+
+      pathElements.forEach((path) => {
+        var title = path.querySelector('title');
+        if (title) {
+          if (allDeskIds.includes(title.textContent)) {
+            path.style.fill = '#FF0000';
+          }
+        }
+      });
+    },
+    async fetchReservations(datePicked) {
+      try {
+        const response = await axios.get(`/api/reservations/${datePicked}`);
+        return response.data;
+      } catch (error) {
+        console.error('Error fetching office details:', error);
+      }
+    },
     handleDateChange(newDate) {
       this.datePicked = newDate;
-    }
+    },
+    handleToggleDesksEditable(isEditable) {
+      console.log('Desks are now editable:', isEditable);
+      this.toggleDesksEditable();
+    },
   },
   async mounted() {
     await this.fetchOfficeDetails();
@@ -173,6 +202,7 @@ export default {
     this.loadTooltipOnPolygons();
     //this.addDebugD3ClickListener();
     this.renderD3FloorplanLayers();
+    this.colorReservedDesks();
   }
 }
 </script>
