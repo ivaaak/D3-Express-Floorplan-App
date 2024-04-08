@@ -208,6 +208,9 @@ export default {
     },
     handleDateChange(newDate) {
       this.datePicked = newDate;
+      //refresh layers
+      this.refreshD3FloorplanLayers();
+      this.colorAndLabelReservedDesks();
     },
     handleToggleDesksEditable(isEditable) {
       console.log('Desks are now editable:', isEditable);
