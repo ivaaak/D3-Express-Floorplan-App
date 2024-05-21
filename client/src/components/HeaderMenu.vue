@@ -55,7 +55,7 @@ export default {
   background-color: var(--primary);
   color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  border-radius: 32px;
+  border-radius: 12px;
 }
 
 .title {

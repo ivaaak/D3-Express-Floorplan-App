@@ -2,7 +2,7 @@
     "overlays": {
         "polygons": [
             {
-                "id": "p1", "name": "kitchen",
+                "id": "p1", "name": "desk1",
                 "points": [
                     { "x": 1.2, "y": 11.0 },
                     { "x": 8.5, "y": 2.0 },
