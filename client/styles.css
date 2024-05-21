@@ -56,7 +56,7 @@ body {
 #floorplanContainer {
   width: 71.5%;
   display: inline-grid;
-  border-radius: 32px;
+  border-radius: 12px;
   background-color: var(--primary);
   color: white;
   vertical-align: top;
@@ -64,7 +64,7 @@ body {
 
   svg {
     width: 100%;
-    border-radius: 32px;
+    border-radius: 12px;
     vertical-align: top;
     border-top: 1px solid black;
   }
@@ -74,7 +74,7 @@ body {
   display: inline-grid;
   margin: 1rem;
   background-color: white;
-  border-radius: 32px;
+  border-radius: 12px;
   vertical-align: top;
   width: 25%;
   height: 30%;

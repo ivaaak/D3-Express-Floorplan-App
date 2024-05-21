@@ -179,7 +179,7 @@ export default {
 .accordion {
     color: var(--theme);
     border: 2px solid;
-    border-radius: 0.5rem;
+    border-radius: 12px;
     overflow: hidden;
 }
 

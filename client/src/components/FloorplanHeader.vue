@@ -1,6 +1,6 @@
 <template>
     <div class="projects-section-header">
-        <p>Office: Blubito AG
+        <p>Office: Software Company Inc.
             <button v-if="this.canEditOfficeName" @click="openDialog()"> ✎ </button>
         </p>
         <p class="time">Todays Date: {{ currentTime }}</p>
@@ -147,7 +147,7 @@ export default {
     transform: translatey(-50%);
     width: 6px;
     height: 6px;
-    border-radius: 50%;
+    border-radius: 12px;
     border: 1px solid var(--secondary-color);
 }
 
